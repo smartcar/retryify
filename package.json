@@ -1,0 +1,19 @@
+{
+  "name": "retry-promise",
+  "version": "1.0.0",
+  "description": "Retries a function and returns a promise",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=development istanbul cover _mocha -- --ui=tdd --recursive --timeout=10000"
+  },
+  "keywords": [
+    "retry",
+    "promise",
+    "bluebird",
+    "decorator",
+    "timeout",
+    "repeat"
+  ],
+  "author": "Philip Hayes",
+  "license": "MIT"
+}
