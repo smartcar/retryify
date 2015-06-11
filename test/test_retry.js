@@ -245,7 +245,7 @@ suite('Retryify', function() {
 
     var fail = retryify({
       log: mockLog,
-    }, function() {
+    }, function fail() {
       return Promise.delay(5).then(function() {
         throw new Error();
       });

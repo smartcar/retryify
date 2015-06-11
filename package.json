@@ -1,6 +1,6 @@
 {
   "name": "retryify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Philip Hayes <philip.hayes@smartcar.com>",
   "description": "Wrap a function so it retries on specific errors and returns a Promise",
   "license": "MIT",

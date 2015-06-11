@@ -49,6 +49,7 @@
 'use strict';
 
 var Promise = require('bluebird');
+var format = require('util').format;
 
 /**
  * Return _default if a field is undefined or null.
@@ -102,10 +103,15 @@ var onError = function(context, err) {
   // update the retry state
   context.attempts += 1;
 
+  var logMessage = format('retrying function %s in %s ms : attempts: %s',
+                          context.fn.name ? context.fn.name : '<Anonymous>',
+                          delay,
+                          context.attempts);
+
+  context.log(logMessage);
+
   // Try the wrapped function again in `context.timeout` milliseconds
   return Promise.delay(delay).then(function() {
-    context.log('retrying function ' + context.fn.name + ': attempts: ' +
-                context.attempts);
     return retryRec(context);
   });
 };
@@ -134,8 +140,6 @@ retryRec = function(context) {
 
   // Base case: last attempt
   if (context.attempts === context.retries) {
-    context.log('retrying function ' + context.fn.name + ': final attempt: ' +
-                'attempts: ' + context.attempts);
     result = context.fn.apply(context.fnThis, context.args);
     return Promise.resolve(result);
   } else {
