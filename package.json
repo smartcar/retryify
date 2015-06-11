@@ -1,28 +1,35 @@
 {
-  "name": "retry",
+  "name": "retryify",
   "version": "1.0.0",
-  "description": "Retries a function and returns a promise",
+  "author": "Philip Hayes <philip.hayes@smartcar.com>",
+  "description": "Wrap a function so it retries on specific errors and returns a Promise",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/smartcar/retryify.git"
+  },
+  "homepage": "https://github.com/smartcar/retryify",
+  "keywords": [
+    "retryify",
+    "retry",
+    "promise",
+    "bluebird",
+    "decorator",
+    "wraper",
+    "timeout",
+    "repeat"
+  ],
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=development istanbul cover _mocha -- --ui=tdd --recursive --timeout=10000",
     "readme": "jsdoc2md index.js > README.md"
   },
-  "keywords": [
-    "retry",
-    "promise",
-    "bluebird",
-    "decorator",
-    "timeout",
-    "repeat"
-  ],
-  "author": "Philip Hayes",
-  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^2.9.27"
+  },
   "devDependencies": {
     "istanbul": "^0.3.15",
     "jsdoc-to-markdown": "^1.1.1",
     "mocha": "^2.2.5"
-  },
-  "dependencies": {
-    "bluebird": "^2.9.27"
   }
 }
