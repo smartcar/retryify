@@ -10,21 +10,33 @@
  * @module retry
  *
  * @example
- * // create a new retry wrapper with some custom options set.
+ * // create a new retry wrapper with some options set.
  * var retry = require('retry')({
  *   retries: 5,
  *   timeout: 1000,
  *   factor: 2,
- *   errors: [RequestError],
+ *   errors: [RequestError, StatusCodeError],
+ *   log: function(msg) { console.log(msg); },
  * });
  *
  * // promisified request library
  * var request = require('request-promise');
  *
- * // get will now retry each time it catches a RequestError, it retries 5
- * // times, or the request finally resolves successfully.
+ * // get will now retry each time it catches a RequestError or a
+ * // StatusCodeError, it retries 5 times, or the request finally resolves
+ * // successfully.
  * var get = retry(function(url) {
  *   return request(url);
+ * });
+ *
+ * // or, add some custom options for this specific function
+ * var post = retry({
+ *   retries: 10
+ * }, function(url, data) {
+ *   return request({
+ *     uri: url,
+ *     method: 'POST',
+ *   });
  * });
  *
  * // send the request, but retry if it fails.
@@ -156,7 +168,7 @@ retryRec = function(context) {
  *   ```timeout * Math.pow(factor, attempts)```
  * @param {(Error|Error[])} [options.errors=Error] A single Error or an
  *   array Errors that trigger a retry when caught
- * @param {Fucntion} [options.log] Logging function that takes a message as
+ * @param {Function} [options.log] Logging function that takes a message as
  *   its first parameter.
  *
  * @return {Function} {@link retryWrapper} A decorator function that wraps a
