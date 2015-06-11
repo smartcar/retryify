@@ -5,13 +5,13 @@ var util = require('util');
 var Promise = require('bluebird');
 var retryLib = require('../index');
 
-suite.only('Retry', function() {
+suite.only('Retryify', function() {
 
-  var retry;
+  var retryify;
 
   suiteSetup(function() {
     // low timeout for faster tests
-    retry = retryLib({
+    retryify = retryLib({
       retries: 2,
       timeout: 5, // ms
       factor: 1.5,
@@ -22,7 +22,7 @@ suite.only('Retry', function() {
   });
 
   test('no times, synchronous fn', function() {
-    var addABC = retry(function(a, b, c) {
+    var addABC = retryify(function(a, b, c) {
       return a + b + c;
     }, { retries: 0 });
 
@@ -34,7 +34,7 @@ suite.only('Retry', function() {
   test('once, error on first call, synchronous fn', function() {
     var retries = 1;
 
-    var addFail = retry(function(a, b, c) {
+    var addFail = retryify(function(a, b, c) {
       if (retries > 0) {
         retries -= 1;
         throw new Error('Oh no! The promise failed :0');
@@ -51,7 +51,7 @@ suite.only('Retry', function() {
   test('twice, error on first and second call, synchronous fn', function() {
     var retries = 2;
 
-    var addFail = retry(function(a, b, c) {
+    var addFail = retryify(function(a, b, c) {
       if (retries > 0) {
         retries -= 1;
         throw new Error('Fail!');
@@ -68,7 +68,7 @@ suite.only('Retry', function() {
   test('always error, synchronous fn', function() {
     var retries = 2;
 
-    var fail = retry(function() {
+    var fail = retryify(function() {
       throw new Error('Fail!');
     }, { retries: retries });
 
@@ -81,7 +81,7 @@ suite.only('Retry', function() {
   });
 
   test('no times, promise fn', function() {
-    var addABC = retry(function(a, b, c) {
+    var addABC = retryify(function(a, b, c) {
       return Promise.delay(5).then(function() {
         return a + b + c;
       });
@@ -95,7 +95,7 @@ suite.only('Retry', function() {
   test('once, error on first call, promise fn', function() {
     var retries = 1;
 
-    var addFail = retry(function(a, b, c) {
+    var addFail = retryify(function(a, b, c) {
       return Promise.delay(5).then(function() {
         if (retries > 0) {
           retries -= 1;
@@ -114,7 +114,7 @@ suite.only('Retry', function() {
   test('twice, error on first call, promise fn', function() {
     var retries = 2;
 
-    var addFail = retry(function(a, b, c) {
+    var addFail = retryify(function(a, b, c) {
       return Promise.delay(5).then(function() {
         if (retries > 0) {
           retries -= 1;
@@ -133,7 +133,7 @@ suite.only('Retry', function() {
   test('always error, promise fn', function() {
     var retries = 2;
 
-    var fail = retry(function() {
+    var fail = retryify(function() {
       return Promise.delay(5).then(function() {
         throw new Error('Fail!');
       });
@@ -148,7 +148,7 @@ suite.only('Retry', function() {
   });
 
   test('retries but never error, promise fn', function() {
-    var addABC = retry(function(a, b, c) {
+    var addABC = retryify(function(a, b, c) {
       return Promise.delay(5).then(function() {
         return a + b + c;
       });
@@ -164,7 +164,7 @@ suite.only('Retry', function() {
       this.foo = 'this is a foo';
     }
 
-    Foo.prototype.fooer = retry(function(a, b, c) {
+    Foo.prototype.fooer = retryify(function(a, b, c) {
       assert.equal(this.foo, 'this is a foo');
       return [this.foo, a, b, c].join(' ');
     });
@@ -181,7 +181,7 @@ suite.only('Retry', function() {
       this.foo = 'this is a foo';
     }
 
-    Foo.prototype.fooer = retry(function(a, b, c) {
+    Foo.prototype.fooer = retryify(function(a, b, c) {
       assert.equal(this.foo, 'this is a foo');
       return Promise.delay(5).bind(this).then(function() {
         return [this.foo, a, b, c].join(' ');
@@ -216,7 +216,7 @@ suite.only('Retry', function() {
 
     var count = 0;
 
-    var fail = retry({
+    var fail = retryify({
       errors: [BarError, BazError],
     }, function() {
       return Promise.delay(5).then(function() {
@@ -238,18 +238,25 @@ suite.only('Retry', function() {
 
   test('log should get called on retry', function() {
     var wasCalled = false;
+
     var mockLog = function() {
       wasCalled = true;
     };
 
-    var fail = retry(function() {
+    var fail = retryify({
+      log: mockLog,
+    }, function() {
       return Promise.delay(5).then(function() {
-        return new Error();
+        throw new Error();
       });
     });
 
-    return fail().catch(function() {
-      assert(wasCalled);
+    assert(!wasCalled, 'mockLog should not be called at this point.');
+
+    return fail().then(function() {
+      assert(false, 'Should not resolve');
+    }).catch(function() {
+      assert(wasCalled, 'mockLog should get called at some point.');
     });
   });
 

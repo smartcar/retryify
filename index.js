@@ -4,14 +4,14 @@
  *
  * ### Installation
  *
- *     $ npm install --save smartcar/retry
+ *     $ npm install retryify
  *
  *
- * @module retry
+ * @module retryify
  *
  * @example
- * // create a new retry wrapper with some options set.
- * var retry = require('retry')({
+ * // create a new retryify wrapper with some options set.
+ * var retryify = require('retryify')({
  *   retries: 5,
  *   timeout: 1000,
  *   factor: 2,
@@ -25,12 +25,12 @@
  * // get will now retry each time it catches a RequestError or a
  * // StatusCodeError, it retries 5 times, or the request finally resolves
  * // successfully.
- * var get = retry(function(url) {
+ * var get = retryify(function(url) {
  *   return request(url);
  * });
  *
  * // or, add some custom options for this specific function
- * var post = retry({
+ * var post = retryify({
  *   retries: 10
  * }, function(url, data) {
  *   return request({
@@ -174,7 +174,7 @@ retryRec = function(context) {
  * @return {Function} {@link retryWrapper} A decorator function that wraps a
  *   a function to turn it into a retry-enabled function.
  */
-var retry = function(options) {
+var retryify = function(options) {
   var _options = options || {};
   _options.retries = getOpt(_options.retries, 3);
   _options.timeout = getOpt(_options.timeout, 300);
@@ -183,7 +183,7 @@ var retry = function(options) {
   _options.log = getOpt(_options.log, function() {});
 
   /**
-   * Retry function decorator. Allows configuration on a function by function
+   * retryify function decorator. Allows configuration on a function by function
    * basis.
    *
    * @param {Object} [innerOptions] Optional configuration object. Same
@@ -237,4 +237,4 @@ var retry = function(options) {
   return retryWrapper;
 };
 
-module.exports = retry;
+module.exports = retryify;

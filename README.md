@@ -1,16 +1,16 @@
-<a name="module_retry"></a>
-## retry
+<a name="module_retryify"></a>
+## retryify
 Quickly and easily wrap functions to make them retry when they fail. Uses
 bluebird promises for maximum convenience!
 
 ### Installation
 
-    $ npm install --save smartcar/retry
+    $ npm install retryify
 
 **Example**  
 ```js
-// create a new retry wrapper with some options set.
-var retry = require('retry')({
+// create a new retryify wrapper with some options set.
+var retryify = require('retryify')({
   retries: 5,
   timeout: 1000,
   factor: 2,
@@ -24,12 +24,12 @@ var request = require('request-promise');
 // get will now retry each time it catches a RequestError or a
 // StatusCodeError, it retries 5 times, or the request finally resolves
 // successfully.
-var get = retry(function(url) {
+var get = retryify(function(url) {
   return request(url);
 });
 
 // or, add some custom options for this specific function
-var post = retry({
+var post = retryify({
   retries: 10
 }, function(url, data) {
   return request({
@@ -44,16 +44,16 @@ get('http://google.com')
   .catch(...);
 ```
 
-* [retry](#module_retry)
-  * [~retry([options])](#module_retry..retry) ⇒ <code>function</code>
-    * [~retryWrapper([innerOptions], fn)](#module_retry..retry..retryWrapper) ⇒ <code>function</code>
+* [retryify](#module_retryify)
+  * [~retryify([options])](#module_retryify..retryify) ⇒ <code>function</code>
+    * [~retryWrapper([innerOptions], fn)](#module_retryify..retryify..retryWrapper) ⇒ <code>function</code>
 
-<a name="module_retry..retry"></a>
-### retry~retry([options]) ⇒ <code>function</code>
+<a name="module_retryify..retryify"></a>
+### retryify~retryify([options]) ⇒ <code>function</code>
 Retry module setup function. Takes an options object that configures the
 default retry options.
 
-**Kind**: inner method of <code>[retry](#module_retry)</code>  
+**Kind**: inner method of <code>[retryify](#module_retryify)</code>  
 **Returns**: <code>function</code> - [retryWrapper](retryWrapper) A decorator function that wraps a
   a function to turn it into a retry-enabled function.  
 
@@ -66,12 +66,12 @@ default retry options.
 | [options.errors] | <code>Error</code> &#124; <code>Array.&lt;Error&gt;</code> | <code>Error</code> | A single Error or an   array Errors that trigger a retry when caught |
 | [options.log] | <code>function</code> |  | Logging function that takes a message as   its first parameter. |
 
-<a name="module_retry..retry..retryWrapper"></a>
-#### retry~retryWrapper([innerOptions], fn) ⇒ <code>function</code>
-Retry function decorator. Allows configuration on a function by function
+<a name="module_retryify..retryify..retryWrapper"></a>
+#### retryify~retryWrapper([innerOptions], fn) ⇒ <code>function</code>
+retryify function decorator. Allows configuration on a function by function
 basis.
 
-**Kind**: inner method of <code>[retry](#module_retry..retry)</code>  
+**Kind**: inner method of <code>[retryify](#module_retryify..retryify)</code>  
 **Returns**: <code>function</code> - The wrapped function.  
 
 | Param | Type | Description |
