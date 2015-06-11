@@ -5,7 +5,7 @@ var util = require('util');
 var Promise = require('bluebird');
 var retryLib = require('../index');
 
-suite.only('Retryify', function() {
+suite('Retryify', function() {
 
   var retryify;
 
