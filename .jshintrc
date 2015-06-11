@@ -1,0 +1,15 @@
+{
+  "bitwise": true,
+  "eqeqeq": true,
+  "eqnull": true,
+  "freeze": true,
+  "funcscope": true,
+  "latedef": true,
+  "mocha": true,
+  "noarg": true,
+  "node": true,
+  "regexp": true,
+  "strict": true,
+  "undef": true,
+  "unused": true
+}

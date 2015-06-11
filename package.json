@@ -1,10 +1,11 @@
 {
-  "name": "retry-promise",
+  "name": "retry",
   "version": "1.0.0",
   "description": "Retries a function and returns a promise",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=development istanbul cover _mocha -- --ui=tdd --recursive --timeout=10000"
+    "test": "NODE_ENV=development istanbul cover _mocha -- --ui=tdd --recursive --timeout=10000",
+    "readme": "jsdoc2md index.js > README.md"
   },
   "keywords": [
     "retry",
@@ -15,5 +16,13 @@
     "repeat"
   ],
   "author": "Philip Hayes",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "istanbul": "^0.3.15",
+    "jsdoc-to-markdown": "^1.1.1",
+    "mocha": "^2.2.5"
+  },
+  "dependencies": {
+    "bluebird": "^2.9.27"
+  }
 }

@@ -3,7 +3,7 @@
 var assert = require('assert');
 var util = require('util');
 var Promise = require('bluebird');
-var retryLib = require('../lib/retry');
+var retryLib = require('../index');
 
 suite.only('Retry', function() {
 
