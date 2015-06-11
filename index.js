@@ -150,8 +150,8 @@ retryRec = function(context) {
  *   after 200 ms, the third after 400 ms, etc.... The formula used to
  *   calculate the delay between each retry:
  *   ```timeout * Math.pow(factor, attempts)```
- * @param {Error[]} [options.errors=[Error]] An array of user provided errors
- *   that trigger a retry when caught
+ * @param {(Error|Error[])} [options.errors=Error] A single Error or an
+ *   array Errors that trigger a retry when caught
  *
  * @return {Function} {@link retryWrapper} A decorator function that wraps a
  *   a function to turn it into a retry-enabled function.
@@ -181,6 +181,10 @@ var retry = function(options) {
     var timeout = getOpt(_innerOptions.timeout, _options.timeout);
     var factor = getOpt(_innerOptions.factor, _options.factor);
     var errors = getOpt(_innerOptions.errors, _options.errors);
+
+    if (!(errors instanceof Array)) {
+      errors = [errors];
+    }
 
     // Wrapper function. Returned in place of the passed in function
     var doRetry = function() {
