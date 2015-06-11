@@ -92,6 +92,8 @@ var onError = function(context, err) {
 
   // Try the wrapped function again in `context.timeout` milliseconds
   return Promise.delay(delay).then(function() {
+    context.log('retrying function ' + context.fn.name + ': attempts: ' +
+                context.attempts);
     return retryRec(context);
   });
 };
@@ -120,6 +122,8 @@ retryRec = function(context) {
 
   // Base case: last attempt
   if (context.attempts === context.retries) {
+    context.log('retrying function ' + context.fn.name + ': final attempt: ' +
+                'attempts: ' + context.attempts);
     result = context.fn.apply(context.fnThis, context.args);
     return Promise.resolve(result);
   } else {
@@ -152,6 +156,8 @@ retryRec = function(context) {
  *   ```timeout * Math.pow(factor, attempts)```
  * @param {(Error|Error[])} [options.errors=Error] A single Error or an
  *   array Errors that trigger a retry when caught
+ * @param {Fucntion} [options.log] Logging function that takes a message as
+ *   its first parameter.
  *
  * @return {Function} {@link retryWrapper} A decorator function that wraps a
  *   a function to turn it into a retry-enabled function.
@@ -162,6 +168,7 @@ var retry = function(options) {
   _options.timeout = getOpt(_options.timeout, 300);
   _options.factor = getOpt(_options.factor, 2);
   _options.errors = getOpt(_options.errors, Error);
+  _options.log = getOpt(_options.log, function() {});
 
   /**
    * Retry function decorator. Allows configuration on a function by function
@@ -186,6 +193,7 @@ var retry = function(options) {
     var timeout = getOpt(_innerOptions.timeout, _options.timeout);
     var factor = getOpt(_innerOptions.factor, _options.factor);
     var errors = getOpt(_innerOptions.errors, _options.errors);
+    var log = getOpt(_innerOptions.log, _options.log);
 
     if (!(errors instanceof Array)) {
       errors = [errors];
@@ -205,6 +213,7 @@ var retry = function(options) {
         timeout: timeout,
         factor: factor,
         errors: errors,
+        log: log,
       };
 
       return retryRec(context);

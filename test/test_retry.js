@@ -236,4 +236,21 @@ suite.only('Retry', function() {
     });
   });
 
+  test('log should get called on retry', function() {
+    var wasCalled = false;
+    var mockLog = function() {
+      wasCalled = true;
+    };
+
+    var fail = retry(function() {
+      return Promise.delay(5).then(function() {
+        return new Error();
+      });
+    });
+
+    return fail().catch(function() {
+      assert(wasCalled);
+    });
+  });
+
 });
