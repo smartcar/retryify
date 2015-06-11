@@ -161,20 +161,25 @@ var retry = function(options) {
   _options.retries = getOpt(_options.retries, 3);
   _options.timeout = getOpt(_options.timeout, 300);
   _options.factor = getOpt(_options.factor, 2);
-  _options.errors = getOpt(_options.errors, [Error]);
+  _options.errors = getOpt(_options.errors, Error);
 
   /**
    * Retry function decorator. Allows configuration on a function by function
    * basis.
    *
-   * @param {Function} fn The function to wrap. Will retry the function if any
-   *   matching errors are caught.
    * @param {Object} [innerOptions] Optional configuration object. Same
    *   format as above.
+   * @param {Function} fn The function to wrap. Will retry the function if any
+   *   matching errors are caught.
    *
    * @return {Function} The wrapped function.
    */
-  var retryWrapper = function(fn, innerOptions) {
+  var retryWrapper = function(innerOptions, fn) {
+    if (innerOptions instanceof Function) {
+      fn = innerOptions;
+      innerOptions = null;
+    }
+
     var _innerOptions = innerOptions || {};
 
     var retries = getOpt(_innerOptions.retries, _options.retries);

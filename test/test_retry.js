@@ -208,19 +208,29 @@ suite.only('Retry', function() {
     }
     util.inherits(BarError, Error);
 
+    function BazError() {
+      this.name = 'BazError';
+      this.message = 'This is a BazError';
+    }
+    util.inherits(BazError, Error);
+
     var count = 0;
 
-    var fail = retry(function() {
+    var fail = retry({
+      errors: [BarError, BazError],
+    }, function() {
       return Promise.delay(5).then(function() {
         count += 1;
         throw new FooError();
       });
-    }, { errors: [BarError] });
+    });
 
     return fail().then(function() {
       assert(false, 'Should not resolve');
     }).catch(BarError, function() {
       assert(false, 'Should not catch a BarError');
+    }).catch(BazError, function() {
+      assert(false, 'Should not catch a BazError');
     }).catch(FooError, function() {
       assert.equal(count, 1);
     });
