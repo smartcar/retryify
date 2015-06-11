@@ -52,22 +52,6 @@ var getOpt = function(option, _default) {
 };
 
 /**
- * Return a shallow array copy of `array`
- *
- * @private
- */
-var copyArray = function(array) {
-  var len = array.length;
-  var copy = [];
-
-  for (var i = 0; i < len; i++) {
-    copy[i] = array[i];
-  }
-
-  return copy;
-};
-
-/**
  * Check if the thrown error matches a user provided error.
  *
  * @private
@@ -200,7 +184,7 @@ var retry = function(options) {
 
     // Wrapper function. Returned in place of the passed in function
     var doRetry = function() {
-      var args = copyArray(arguments);
+      var args = arguments;
 
       var context = {
         fn: fn,
