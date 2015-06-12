@@ -217,7 +217,12 @@ var retryify = function(options) {
 
     // Wrapper function. Returned in place of the passed in function
     var doRetry = function() {
-      var args = arguments;
+      // do an inline copy to avoid leaking the arguments object.
+      // https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#32-leaking-arguments
+      var args = new Array(arguments.length);
+      for (var i = 0; i < args.length; ++i) {
+        args[i] = arguments[i];
+      }
 
       var context = {
         fn: fn,
