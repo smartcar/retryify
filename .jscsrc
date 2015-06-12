@@ -13,7 +13,10 @@
   },
   "disallowSpacesInsideParentheses": true,
   "disallowTrailingWhitespace": true,
-  "maximumLineLength": 80,
+  "maximumLineLength": {
+    "value": 80,
+    "allowUrlComments": true
+  },
   "requireCapitalizedConstructors": true,
   "requireCurlyBraces": [
     "if",
