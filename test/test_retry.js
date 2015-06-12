@@ -21,65 +21,6 @@ suite('Retryify', function() {
     retryLib();
   });
 
-  test('no times, synchronous fn', function() {
-    var addABC = retryify(function(a, b, c) {
-      return a + b + c;
-    }, { retries: 0 });
-
-    return addABC(1, 2, 3).then(function(sum) {
-      assert.equal(sum, 6);
-    });
-  });
-
-  test('once, error on first call, synchronous fn', function() {
-    var retries = 1;
-
-    var addFail = retryify(function(a, b, c) {
-      if (retries > 0) {
-        retries -= 1;
-        throw new Error('Oh no! The promise failed :0');
-      } else {
-        return a + b + c;
-      }
-    }, { retries: retries });
-
-    return addFail(1, 2, 3).then(function(sum) {
-      assert.equal(sum, 6);
-    });
-  });
-
-  test('twice, error on first and second call, synchronous fn', function() {
-    var retries = 2;
-
-    var addFail = retryify(function(a, b, c) {
-      if (retries > 0) {
-        retries -= 1;
-        throw new Error('Fail!');
-      } else {
-        return a + b + c;
-      }
-    }, { retries: retries });
-
-    return addFail(1, 2, 3).then(function(sum) {
-      assert.equal(sum, 6);
-    });
-  });
-
-  test('always error, synchronous fn', function() {
-    var retries = 2;
-
-    var fail = retryify(function() {
-      throw new Error('Fail!');
-    }, { retries: retries });
-
-    return fail().then(function() {
-      throw new Error('Promise should not resolve.');
-    }).catch(Error, function(err) {
-      // should not clean error message
-      assert.equal(err.message, 'Fail!');
-    });
-  });
-
   test('no times, promise fn', function() {
     var addABC = retryify(function(a, b, c) {
       return Promise.delay(5).then(function() {
@@ -156,23 +97,6 @@ suite('Retryify', function() {
 
     return addABC(1, 2, 3).then(function(sum) {
       assert.equal(sum, 6);
-    });
-  });
-
-  test('synchronous fn with `this` bound', function() {
-    function Foo() {
-      this.foo = 'this is a foo';
-    }
-
-    Foo.prototype.fooer = retryify(function(a, b, c) {
-      assert.equal(this.foo, 'this is a foo');
-      return [this.foo, a, b, c].join(' ');
-    });
-
-    var aFoo = new Foo();
-
-    return aFoo.fooer(1, 2, 3).then(function(foo) {
-      assert.equal(foo, 'this is a foo 1 2 3');
     });
   });
 

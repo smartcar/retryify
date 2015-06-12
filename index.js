@@ -79,6 +79,7 @@ var isMatchingError = function(err, userErrors) {
   return false;
 };
 
+// Declare ahead. retryRec and onError are mutually recursive.
 var retryRec;
 
 /**
@@ -143,13 +144,8 @@ retryRec = function(context) {
     result = context.fn.apply(context.fnThis, context.args);
     return Promise.resolve(result);
   } else {
-    // wrap the function eval in a try catch to deal with synchronous functions
-    try {
-      result = context.fn.apply(context.fnThis, context.args);
-    } catch (err) {
-      return onError(context, err);
-    }
-
+    // try the function. if we catch anything, wait, then retry
+    result = context.fn.apply(context.fnThis, context.args);
     return Promise.resolve(result).catch(function(err) {
       return onError(context, err);
     });
