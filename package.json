@@ -1,13 +1,10 @@
 {
   "name": "retryify",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Philip Hayes <philip.hayes@smartcar.com>",
-  "description": "Wrap a function so it retries on specific errors and returns a Promise",
+  "description": "Wrap a function to retry on specific errors",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/smartcar/retryify.git"
-  },
+  "repository": "smartcar/retryify",
   "homepage": "https://github.com/smartcar/retryify",
   "keywords": [
     "retryify",
@@ -15,7 +12,7 @@
     "promise",
     "bluebird",
     "decorator",
-    "wraper",
+    "wrapper",
     "timeout",
     "repeat"
   ],
