@@ -1,7 +1,7 @@
 {
   "name": "retryify",
-  "version": "1.0.4",
-  "author": "Philip Hayes <philip.hayes@smartcar.com>",
+  "version": "1.0.5",
+  "author": "Smartcar <hello@smartcar.com>",
   "description": "Wrap a function to retry on specific errors",
   "license": "MIT",
   "repository": "smartcar/retryify",
@@ -18,13 +18,15 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=development istanbul cover _mocha -- --ui=tdd --recursive --timeout=10000",
+    "test": "mocha --ui=tdd --recursive",
+    "cover": "istanbul cover _mocha -- --ui=tdd --recursive",
     "readme": "jsdoc2md index.js > README.md"
   },
   "dependencies": {
     "bluebird": "^2.9.27"
   },
   "devDependencies": {
+    "coveralls": "^2.11.4",
     "istanbul": "^0.3.15",
     "jsdoc-to-markdown": "^1.1.1",
     "mocha": "^2.2.5"

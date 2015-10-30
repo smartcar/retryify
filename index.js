@@ -105,7 +105,7 @@ var onError = function(context, err) {
   context.attempts += 1;
 
   var logMessage = format('retrying function %s in %s ms : attempts: %s',
-                          context.fn.name ? context.fn.name : '<Anonymous>',
+                          context.fnName ? context.fnName : '<Anonymous>',
                           delay,
                           context.attempts);
 
@@ -221,7 +221,8 @@ var retryify = function(options) {
       }
 
       var context = {
-        fn: fn,
+        fn: Promise.method(fn),
+        fnName: fn.name,
         args: args,
         // Make sure `this` is preserved when executing the wrapped function
         fnThis: getOpt(this, null),

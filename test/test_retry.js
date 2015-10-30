@@ -21,6 +21,16 @@ suite('Retryify', function() {
     retryLib();
   });
 
+  test('no times, standard fn', function() {
+    var addABC = retryify(function(a, b, c) {
+      return a + b + c;
+    }, { retries: 0 });
+
+    return addABC(1, 2, 3).then(function(sum) {
+      assert.equal(sum, 6);
+    });
+  });
+
   test('no times, promise fn', function() {
     var addABC = retryify(function(a, b, c) {
       return Promise.delay(5).then(function() {
@@ -29,6 +39,23 @@ suite('Retryify', function() {
     }, { retries: 0 });
 
     return addABC(1, 2, 3).then(function(sum) {
+      assert.equal(sum, 6);
+    });
+  });
+
+  test('once, error on first call, standard fn', function() {
+    var retries = 1;
+
+    var addFail = retryify(function(a, b, c) {
+      if (retries > 0) {
+        retries -= 1;
+        throw new Error('Oh no! The promise failed :0');
+      } else {
+        return a + b + c;
+      }
+    }, { retries: retries });
+
+    return addFail(1, 2, 3).then(function(sum) {
       assert.equal(sum, 6);
     });
   });
