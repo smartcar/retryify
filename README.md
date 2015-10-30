@@ -1,5 +1,5 @@
-<a name="module_retryify"></a>
-## retryify
+# retryify [![Build Status](https://travis-ci.org/smartcar/retryify.svg?branch=master)](https://travis-ci.org/smartcar/retryify) [![Coverage Status](https://coveralls.io/repos/smartcar/retryify/badge.svg?branch=master&service=github)](https://coveralls.io/github/smartcar/retryify?branch=master)
+
 Quickly and easily wrap functions to make them retry when they fail. Uses
 bluebird promises for maximum convenience!
 
@@ -7,7 +7,7 @@ bluebird promises for maximum convenience!
 
     $ npm install retryify
 
-**Example**  
+**Example**
 ```js
 // create a new retryify wrapper with some options set.
 var retryify = require('retryify')({
@@ -53,9 +53,9 @@ get('http://google.com')
 Retry module setup function. Takes an options object that configures the
 default retry options.
 
-**Kind**: inner method of <code>[retryify](#module_retryify)</code>  
+**Kind**: inner method of <code>[retryify](#module_retryify)</code>
 **Returns**: <code>function</code> - [retryWrapper](retryWrapper) A decorator function that wraps a
-  a function to turn it into a retry-enabled function.  
+  a function to turn it into a retry-enabled function.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -71,8 +71,8 @@ default retry options.
 retryify function decorator. Allows configuration on a function by function
 basis.
 
-**Kind**: inner method of <code>[retryify](#module_retryify..retryify)</code>  
-**Returns**: <code>function</code> - The wrapped function.  
+**Kind**: inner method of <code>[retryify](#module_retryify..retryify)</code>
+**Returns**: <code>function</code> - The wrapped function.
 
 | Param | Type | Description |
 | --- | --- | --- |

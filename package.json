@@ -26,6 +26,7 @@
     "bluebird": "^2.9.27"
   },
   "devDependencies": {
+    "coveralls": "^2.11.4",
     "istanbul": "^0.3.15",
     "jsdoc-to-markdown": "^1.1.1",
     "mocha": "^2.2.5"
