@@ -2,19 +2,21 @@ language:
   - node_js
 
 node_js:
-  - "stable"
-  - "4.2"
-  - "4.1"
-  - "4.0"
-  - "0.12"
-  - "0.11"
-  - "iojs"
+  - stable
+  - '4.2'
+  - '4.1'
+  - '4.0'
+  - '0.12'
+  - '0.11'
+  - 'iojs'
 
 after_script:
   - npm run cover; cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 
 deploy:
-  provider: npm
-    api_key: "$NPM_API_TOKEN"
   on:
     branch: master
+    node: stable
+  provider: npm
+  email: hello@smartcar.com
+  api_key: $NPM_API_TOKEN
