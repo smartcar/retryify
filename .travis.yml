@@ -12,3 +12,9 @@ node_js:
 
 after_script:
   - npm run cover; cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+
+deploy:
+  provider: npm
+    api_key: "$NPM_API_TOKEN"
+  on:
+    branch: master

@@ -1,4 +1,4 @@
-# retryify [![Build Status](https://travis-ci.org/smartcar/retryify.svg?branch=master)](https://travis-ci.org/smartcar/retryify) [![Coverage Status](https://coveralls.io/repos/smartcar/retryify/badge.svg?branch=master&service=github)](https://coveralls.io/github/smartcar/retryify?branch=master)
+# retryify [![NPM version](https://img.shields.io/npm/v/retryify.svg)](https://www.npmjs.com/package/retryify) [![Build Status](https://travis-ci.org/smartcar/retryify.svg?branch=master)](https://travis-ci.org/smartcar/retryify) [![Coverage Status](https://coveralls.io/repos/smartcar/retryify/badge.svg?branch=master&service=github)](https://coveralls.io/github/smartcar/retryify?branch=master)
 
 Quickly and easily wrap functions to make them retry when they fail. Uses
 bluebird promises for maximum convenience!
