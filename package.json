@@ -19,7 +19,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --ui=tdd --recursive",
-    "cover": "istanbul cover _mocha -- --ui=tdd --recursive",
+    "cover": "nyc npm test",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "readme": "jsdoc2md index.js > README.md"
   },
   "dependencies": {

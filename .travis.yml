@@ -11,7 +11,8 @@ node_js:
   - 'iojs'
 
 after_script:
-  - npm run cover; cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+  - npm run cover
+  - npm run coveralls
 
 deploy:
   on:
