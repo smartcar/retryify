@@ -1,218 +1,181 @@
-'use strict';
+import test from 'ava';
+import util from 'util';
+import Promise from 'bluebird';
+import retryLib from '../index';
 
-var assert = require('assert');
-var util = require('util');
-var Promise = require('bluebird');
-var retryLib = require('../index');
+const retryify = retryLib({
+  retries: 2,
+  timeout: 5, // ms
+  factor: 1.5,
+});
 
-suite('Retryify', function() {
+// MUST GET 100% COVERAGE (ノ._.)ノ
+retryLib();
 
-  var retryify;
+test('no times, standard fn', async function(t) {
+  const addABC = retryify(function(a, b, c) {
+    return a + b + c;
+  }, {retries: 0});
 
-  suiteSetup(function() {
-    // low timeout for faster tests
-    retryify = retryLib({
-      retries: 2,
-      timeout: 5, // ms
-      factor: 1.5,
-    });
+  const sum = await addABC(1, 2, 3);
+  t.is(sum, 6);
+});
 
-    // MUST GET 100% COVERAGE (ノ._.)ノ
-    retryLib();
-  });
-
-  test('no times, standard fn', function() {
-    var addABC = retryify(function(a, b, c) {
+test('no times, promise fn', async function(t) {
+  const addABC = retryify(function(a, b, c) {
+    return Promise.delay(5).then(function() {
       return a + b + c;
-    }, {retries: 0});
-
-    return addABC(1, 2, 3).then(function(sum) {
-      assert.equal(sum, 6);
     });
-  });
+  }, {retries: 0});
 
-  test('no times, promise fn', function() {
-    var addABC = retryify(function(a, b, c) {
-      return Promise.delay(5).then(function() {
-        return a + b + c;
-      });
-    }, {retries: 0});
+  const sum = await addABC(1, 2, 3);
+  t.is(sum, 6);
+});
 
-    return addABC(1, 2, 3).then(function(sum) {
-      assert.equal(sum, 6);
-    });
-  });
+test('once, error on first call, standard fn', async function(t) {
+  var retries = 1;
 
-  test('once, error on first call, standard fn', function() {
-    var retries = 1;
+  const addFail = retryify(function(a, b, c) {
+    if (retries > 0) {
+      retries -= 1;
+      throw new Error('Oh no! The promise failed :0');
+    } else {
+      return a + b + c;
+    }
+  }, {retries});
 
-    var addFail = retryify(function(a, b, c) {
+  const sum = await addFail(1, 2, 3);
+  t.is(sum, 6);
+});
+
+test('once, error on first call, promise fn', async function(t) {
+  var retries = 1;
+
+  const addFail = retryify(function(a, b, c) {
+    return Promise.delay(5).then(function() {
       if (retries > 0) {
         retries -= 1;
         throw new Error('Oh no! The promise failed :0');
       } else {
         return a + b + c;
       }
-    }, {retries: retries});
-
-    return addFail(1, 2, 3).then(function(sum) {
-      assert.equal(sum, 6);
     });
-  });
+  }, {retries});
 
-  test('once, error on first call, promise fn', function() {
-    var retries = 1;
+  const sum = await addFail(1, 2, 3);
+  t.is(sum, 6);
+});
 
-    var addFail = retryify(function(a, b, c) {
-      return Promise.delay(5).then(function() {
-        if (retries > 0) {
-          retries -= 1;
-          throw new Error('Oh no! The promise failed :0');
-        } else {
-          return a + b + c;
-        }
-      });
-    }, {retries: retries});
+test('twice, error on first call, promise fn', async function(t) {
+  var retries = 2;
 
-    return addFail(1, 2, 3).then(function(sum) {
-      assert.equal(sum, 6);
-    });
-  });
-
-  test('twice, error on first call, promise fn', function() {
-    var retries = 2;
-
-    var addFail = retryify(function(a, b, c) {
-      return Promise.delay(5).then(function() {
-        if (retries > 0) {
-          retries -= 1;
-          throw new Error('Oh no! The promise failed :0');
-        } else {
-          return a + b + c;
-        }
-      });
-    }, {retries: retries});
-
-    return addFail(1, 2, 3).then(function(sum) {
-      assert.equal(sum, 6);
-    });
-  });
-
-  test('always error, promise fn', function() {
-    var retries = 2;
-
-    var fail = retryify(function() {
-      return Promise.delay(5).then(function() {
-        throw new Error('Fail!');
-      });
-    }, {retries: retries});
-
-    return fail().then(function() {
-      throw new Error('Promise should not resolve.');
-    }).catch(Error, function(err) {
-      // should not clean error message
-      assert.equal(err.message, 'Fail!');
-    });
-  });
-
-  test('retries but never error, promise fn', function() {
-    var addABC = retryify(function(a, b, c) {
-      return Promise.delay(5).then(function() {
+  const addFail = retryify(function(a, b, c) {
+    return Promise.delay(5).then(function() {
+      if (retries > 0) {
+        retries -= 1;
+        throw new Error('Oh no! The promise failed :0');
+      } else {
         return a + b + c;
-      });
-    }, {retries: 3});
+      }
+    });
+  }, {retries});
 
-    return addABC(1, 2, 3).then(function(sum) {
-      assert.equal(sum, 6);
+  const sum = await addFail(1, 2, 3);
+  t.is(sum, 6);
+});
+
+test('always error, promise fn', async function(t) {
+  var retries = 2;
+
+  const fail = retryify(function() {
+    return Promise.delay(5).then(function() {
+      throw new Error('Fail!');
+    });
+  }, {retries});
+
+  const err = await t.throws(fail());
+  t.is(err.message, 'Fail!');
+});
+
+test('retries but never error, promise fn', async function(t) {
+  const addABC = retryify(function(a, b, c) {
+    return Promise.delay(5).then(function() {
+      return a + b + c;
+    });
+  }, {retries: 3});
+
+  const sum = await addABC(1, 2, 3);
+  t.is(sum, 6);
+});
+
+test('promise fn with `this` bound', async function(t) {
+  function Foo() {
+    this.foo = 'this is a foo';
+  }
+
+  Foo.prototype.fooer = retryify(function(a, b, c) {
+    t.is(this.foo, 'this is a foo');
+    return Promise.delay(5).bind(this).then(function() {
+      return [this.foo, a, b, c].join(' ');
     });
   });
 
-  test('promise fn with `this` bound', function() {
-    function Foo() {
-      this.foo = 'this is a foo';
-    }
+  const aFoo = new Foo();
 
-    Foo.prototype.fooer = retryify(function(a, b, c) {
-      assert.equal(this.foo, 'this is a foo');
-      return Promise.delay(5).bind(this).then(function() {
-        return [this.foo, a, b, c].join(' ');
-      });
-    });
+  const foo = await aFoo.fooer(1, 2, 3);
+  t.is(foo, 'this is a foo 1 2 3');
+});
 
-    var aFoo = new Foo();
+test('error doesn\'t match user defined error', async function(t) {
+  function FooError() {
+    this.name = 'FooError';
+    this.message = 'This is a FooError';
+  }
+  util.inherits(FooError, Error);
 
-    return aFoo.fooer(1, 2, 3).then(function(foo) {
-      assert.equal(foo, 'this is a foo 1 2 3');
-    });
-  });
+  function BarError() {
+    this.name = 'BarError';
+    this.message = 'This is a BarError';
+  }
+  util.inherits(BarError, Error);
 
-  test('error doesn\'t match user defined error', function() {
-    function FooError() {
-      this.name = 'FooError';
-      this.message = 'This is a FooError';
-    }
-    util.inherits(FooError, Error);
+  function BazError() {
+    this.name = 'BazError';
+    this.message = 'This is a BazError';
+  }
+  util.inherits(BazError, Error);
 
-    function BarError() {
-      this.name = 'BarError';
-      this.message = 'This is a BarError';
-    }
-    util.inherits(BarError, Error);
+  var count = 0;
 
-    function BazError() {
-      this.name = 'BazError';
-      this.message = 'This is a BazError';
-    }
-    util.inherits(BazError, Error);
-
-    var count = 0;
-
-    var fail = retryify({
-      errors: [BarError, BazError],
-    }, function() {
-      return Promise.delay(5).then(function() {
-        count += 1;
-        throw new FooError();
-      });
-    });
-
-    return fail()
-      .then(function() {
-        assert(false, 'Should not resolve');
-      })
-      .catch(BarError, function() {
-        assert(false, 'Should not catch a BarError');
-      })
-      .catch(BazError, function() {
-        assert(false, 'Should not catch a BazError');
-      })
-      .catch(FooError, function() {
-        assert.equal(count, 1);
-      });
-  });
-
-  test('log should get called on retry', function() {
-    var wasCalled = false;
-
-    var mockLog = function() {
-      wasCalled = true;
-    };
-
-    var fail = retryify({
-      log: mockLog,
-    }, function fail() {
-      return Promise.delay(5).then(function() {
-        throw new Error();
-      });
-    });
-
-    assert(!wasCalled, 'mockLog should not be called at this point.');
-
-    return fail().then(function() {
-      assert(false, 'Should not resolve');
-    }).catch(function() {
-      assert(wasCalled, 'mockLog should get called at some point.');
+  const fail = retryify({
+    errors: [BarError, BazError],
+  }, function() {
+    return Promise.delay(5).then(function() {
+      count += 1;
+      throw new FooError();
     });
   });
 
+  await t.throws(fail(), FooError);
+  t.is(count, 1);
+});
+
+test('log should get called on retry', async function(t) {
+  var wasCalled = false;
+
+  const mockLog = function() {
+    wasCalled = true;
+  };
+
+  const fail = retryify({
+    log: mockLog,
+  }, function fail() {
+    return Promise.delay(5).then(function() {
+      throw new Error();
+    });
+  });
+
+  t.false(wasCalled, 'mockLog should not be called at this point.');
+  await t.throws(fail());
+  t.true(wasCalled, 'mockLog should get called at some point.');
 });

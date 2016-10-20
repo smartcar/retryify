@@ -34,7 +34,7 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "test": "mocha --ui=tdd --recursive",
+    "test": "ava",
     "lint": "eslint . --cache",
     "cover": "nyc npm test",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
@@ -44,10 +44,10 @@
     "bluebird": "^3.4.6"
   },
   "devDependencies": {
+    "ava": "^0.16.0",
     "eslint": "^3.8.1",
     "eslint-config-smartcar": "^1.0.0",
     "jsdoc-to-markdown": "^2.0.1",
-    "mocha": "^3.1.2",
     "nyc": "^8.3.2"
   },
   "eslintConfig": {
