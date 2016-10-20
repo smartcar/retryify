@@ -10,8 +10,12 @@ Session.vim
 logs
 *.log
 
+# Eslint
+.eslintcache
+
 # Coverage directory used by tools like istanbul
 coverage
+.nyc_output
 
 # Dependency directory
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git

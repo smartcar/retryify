@@ -180,7 +180,7 @@ var retryify = function(options) {
   _options.timeout = getOpt(_options.timeout, 300);
   _options.factor = getOpt(_options.factor, 2);
   _options.errors = getOpt(_options.errors, Error);
-  _options.log = getOpt(_options.log, function() {});
+  _options.log = getOpt(_options.log, function() { /* empty */ });
 
   /**
    * retryify function decorator. Allows configuration on a function by function

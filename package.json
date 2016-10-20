@@ -1,11 +1,22 @@
 {
   "name": "retryify",
-  "version": "1.0.5",
-  "author": "Smartcar <hello@smartcar.com>",
+  "version": "1.1.0",
   "description": "Wrap a function to retry on specific errors",
+  "main": "index.js",
   "license": "MIT",
-  "repository": "smartcar/retryify",
-  "homepage": "https://github.com/smartcar/retryify",
+  "author": {
+    "name": "Smartcar",
+    "email": "hello@smartcar.com",
+    "url": "https://smartcar.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smartcar/retryify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/smartcar/retryify/issues"
+  },
+  "homepage": "https://github.com/smartcar/retryify#readme",
   "keywords": [
     "retryify",
     "retry",
@@ -16,19 +27,32 @@
     "timeout",
     "repeat"
   ],
-  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "scripts": {
-    "test": "mocha --ui=tdd --recursive",
-    "cover": "istanbul cover _mocha -- --ui=tdd --recursive",
+    "test": "ava",
+    "lint": "eslint . --cache",
+    "cover": "nyc npm test -s && nyc report --reporter=text-lcov > .nyc_output/coverage.lcov",
     "readme": "jsdoc2md index.js > README.md"
   },
   "dependencies": {
-    "bluebird": "^2.9.27"
+    "bluebird": "^3.4.6"
   },
   "devDependencies": {
-    "coveralls": "^2.11.4",
-    "istanbul": "^0.3.15",
-    "jsdoc-to-markdown": "^1.1.1",
-    "mocha": "^2.2.5"
+    "ava": "^0.16.0",
+    "eslint": "^3.8.1",
+    "eslint-config-smartcar": "^1.0.0",
+    "jsdoc-to-markdown": "^2.0.1",
+    "nyc": "^8.3.2"
+  },
+  "eslintConfig": {
+    "extends": "smartcar",
+    "env": {
+      "es6": true
+    }
   }
 }

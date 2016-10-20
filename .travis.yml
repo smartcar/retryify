@@ -3,15 +3,16 @@ language:
 
 node_js:
   - stable
-  - '4.2'
-  - '4.1'
-  - '4.0'
-  - '0.12'
-  - '0.11'
-  - 'iojs'
+  - '4'
 
-after_script:
-  - npm run cover; cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+cache:
+  directories:
+    - $HOME/.npm
+    - node_modules
+
+after_success:
+  - npm run cover
+  - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   on:

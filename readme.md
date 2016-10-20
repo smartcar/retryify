@@ -1,4 +1,4 @@
-# retryify [![NPM version](https://img.shields.io/npm/v/retryify.svg)](https://www.npmjs.com/package/retryify) [![Build Status](https://travis-ci.org/smartcar/retryify.svg?branch=master)](https://travis-ci.org/smartcar/retryify) [![Coverage Status](https://coveralls.io/repos/smartcar/retryify/badge.svg?branch=master&service=github)](https://coveralls.io/github/smartcar/retryify?branch=master)
+# retryify [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coverage-image]][coverage-url]
 
 Quickly and easily wrap functions to make them retry when they fail. Uses
 bluebird promises for maximum convenience!
@@ -79,3 +79,11 @@ basis.
 | [innerOptions] | <code>Object</code> | Optional configuration object. Same   format as above. |
 | fn | <code>function</code> | The function to wrap. Will retry the function if any   matching errors are caught. |
 
+[npm-url]: https://www.npmjs.com/package/retryify
+[npm-image]: https://img.shields.io/npm/v/retryify.svg?style=flat-square
+
+[travis-url]: https://travis-ci.org/smartcar/retryify
+[travis-image]: https://img.shields.io/travis/smartcar/retryify.svg?style=flat-square
+
+[coverage-url]: https://codecov.io/gh/smartcar/retryify
+[coverage-image]: https://img.shields.io/codecov/c/github/smartcar/retryify.svg?style=flat-square
