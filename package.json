@@ -36,8 +36,7 @@
   "scripts": {
     "test": "ava",
     "lint": "eslint . --cache",
-    "cover": "nyc npm test",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "cover": "nyc npm test -s && nyc report --reporter=text-lcov > .nyc_output/coverage.lcov",
     "readme": "jsdoc2md index.js > README.md"
   },
   "dependencies": {

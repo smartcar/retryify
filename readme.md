@@ -85,5 +85,5 @@ basis.
 [travis-url]: https://travis-ci.org/smartcar/retryify
 [travis-image]: https://img.shields.io/travis/smartcar/retryify.svg?style=flat-square
 
-[coverage-url]: https://coveralls.io/github/smartcar/retryify
-[coverage-image]: https://img.shields.io/coveralls/smartcar/retryify.svg?style=flat-square
+[coverage-url]: https://codecov.io/gh/smartcar/retryify
+[coverage-image]: https://img.shields.io/codecov/c/github/smartcar/retryify.svg?style=flat-square

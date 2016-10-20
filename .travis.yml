@@ -10,9 +10,9 @@ cache:
     - $HOME/.npm
     - node_modules
 
-after_script:
+after_success:
   - npm run cover
-  - npm run coveralls
+  - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   on:
