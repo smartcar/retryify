@@ -30,6 +30,9 @@
   "files": [
     "index.js"
   ],
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "scripts": {
     "test": "mocha --ui=tdd --recursive",
     "cover": "nyc npm test",
@@ -40,7 +43,7 @@
     "bluebird": "^3.4.6"
   },
   "devDependencies": {
-    "coveralls": "^2.11.4",
+    "coveralls": "^2.11.14",
     "jsdoc-to-markdown": "^2.0.1",
     "mocha": "^3.1.2",
     "nyc": "^8.3.2"
