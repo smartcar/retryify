@@ -24,7 +24,7 @@ suite('Retryify', function() {
   test('no times, standard fn', function() {
     var addABC = retryify(function(a, b, c) {
       return a + b + c;
-    }, { retries: 0 });
+    }, {retries: 0});
 
     return addABC(1, 2, 3).then(function(sum) {
       assert.equal(sum, 6);
@@ -36,7 +36,7 @@ suite('Retryify', function() {
       return Promise.delay(5).then(function() {
         return a + b + c;
       });
-    }, { retries: 0 });
+    }, {retries: 0});
 
     return addABC(1, 2, 3).then(function(sum) {
       assert.equal(sum, 6);
@@ -53,7 +53,7 @@ suite('Retryify', function() {
       } else {
         return a + b + c;
       }
-    }, { retries: retries });
+    }, {retries: retries});
 
     return addFail(1, 2, 3).then(function(sum) {
       assert.equal(sum, 6);
@@ -72,7 +72,7 @@ suite('Retryify', function() {
           return a + b + c;
         }
       });
-    }, { retries: retries });
+    }, {retries: retries});
 
     return addFail(1, 2, 3).then(function(sum) {
       assert.equal(sum, 6);
@@ -91,7 +91,7 @@ suite('Retryify', function() {
           return a + b + c;
         }
       });
-    }, { retries: retries });
+    }, {retries: retries});
 
     return addFail(1, 2, 3).then(function(sum) {
       assert.equal(sum, 6);
@@ -105,7 +105,7 @@ suite('Retryify', function() {
       return Promise.delay(5).then(function() {
         throw new Error('Fail!');
       });
-    }, { retries: retries });
+    }, {retries: retries});
 
     return fail().then(function() {
       throw new Error('Promise should not resolve.');
@@ -120,7 +120,7 @@ suite('Retryify', function() {
       return Promise.delay(5).then(function() {
         return a + b + c;
       });
-    }, { retries: 3 });
+    }, {retries: 3});
 
     return addABC(1, 2, 3).then(function(sum) {
       assert.equal(sum, 6);
@@ -176,15 +176,19 @@ suite('Retryify', function() {
       });
     });
 
-    return fail().then(function() {
-      assert(false, 'Should not resolve');
-    }).catch(BarError, function() {
-      assert(false, 'Should not catch a BarError');
-    }).catch(BazError, function() {
-      assert(false, 'Should not catch a BazError');
-    }).catch(FooError, function() {
-      assert.equal(count, 1);
-    });
+    return fail()
+      .then(function() {
+        assert(false, 'Should not resolve');
+      })
+      .catch(BarError, function() {
+        assert(false, 'Should not catch a BarError');
+      })
+      .catch(BazError, function() {
+        assert(false, 'Should not catch a BazError');
+      })
+      .catch(FooError, function() {
+        assert.equal(count, 1);
+      });
   });
 
   test('log should get called on retry', function() {
