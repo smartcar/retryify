@@ -1,11 +1,22 @@
 {
   "name": "retryify",
   "version": "1.0.5",
-  "author": "Smartcar <hello@smartcar.com>",
   "description": "Wrap a function to retry on specific errors",
+  "main": "index.js",
   "license": "MIT",
-  "repository": "smartcar/retryify",
-  "homepage": "https://github.com/smartcar/retryify",
+  "author": {
+    "name": "Smartcar",
+    "email": "hello@smartcar.com",
+    "url": "https://smartcar.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smartcar/retryify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/smartcar/retryify/issues"
+  },
+  "homepage": "https://github.com/smartcar/retryify#readme",
   "keywords": [
     "retryify",
     "retry",
@@ -16,7 +27,9 @@
     "timeout",
     "repeat"
   ],
-  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "mocha --ui=tdd --recursive",
     "cover": "nyc npm test",
