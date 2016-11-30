@@ -1,4 +1,4 @@
-# retryify [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coverage-image]][coverage-url]
+# retryify [![NPM version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Coverage Status][coverage-image]][coverage-url]
 
 Quickly and easily wrap functions to make them retry when they fail. Uses
 bluebird promises for maximum convenience!
@@ -82,8 +82,8 @@ basis.
 [npm-url]: https://www.npmjs.com/package/retryify
 [npm-image]: https://img.shields.io/npm/v/retryify.svg?style=flat-square
 
-[travis-url]: https://travis-ci.org/smartcar/retryify
-[travis-image]: https://img.shields.io/travis/smartcar/retryify.svg?style=flat-square
+[ci-url]: https://travis-ci.org/smartcar/retryify
+[ci-image]: https://img.shields.io/travis/smartcar/retryify/master.svg?style=flat-square
 
 [coverage-url]: https://codecov.io/gh/smartcar/retryify
-[coverage-image]: https://img.shields.io/codecov/c/github/smartcar/retryify.svg?style=flat-square
+[coverage-image]: https://img.shields.io/codecov/c/github/smartcar/retryify/master.svg?style=flat-square
