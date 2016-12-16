@@ -43,11 +43,11 @@
     "bluebird": "^3.4.6"
   },
   "devDependencies": {
-    "ava": "^0.16.0",
+    "ava": "^0.17.0",
     "eslint": "^3.8.1",
-    "eslint-config-smartcar": "^1.0.0",
+    "eslint-config-smartcar": "^2.0.0",
     "jsdoc-to-markdown": "^2.0.1",
-    "nyc": "^8.3.2"
+    "nyc": "^10.0.0"
   },
   "eslintConfig": {
     "extends": "smartcar",
