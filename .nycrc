@@ -1,0 +1,18 @@
+{
+  "lines": 98,
+  "branches": 98,
+  "functions": 98,
+  "statements": 98,
+  "all" : true,
+  "cache": true,
+  "reporter": [
+    "lcov",
+    "text"
+  ],
+  "exclude": [
+    "test",
+    "node_modules"
+  ],
+  "check-coverage": true,
+  "report-dir": ".nyc_output"
+}

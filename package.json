@@ -37,7 +37,7 @@
     "test": "ava",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
-    "cover": "nyc npm test -s && nyc report --reporter=text-lcov > .nyc_output/coverage.lcov",
+    "cover": "nyc npm test -s",
     "readme": "jsdoc2md index.js > README.md"
   },
   "dependencies": {
