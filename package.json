@@ -43,7 +43,7 @@
     "bluebird": "^3.4.6"
   },
   "devDependencies": {
-    "ava": "^0.17.0",
+    "ava": "^0.18.0",
     "eslint": "^3.8.1",
     "eslint-config-smartcar": "^2.0.0",
     "jsdoc-to-markdown": "^2.0.1",
