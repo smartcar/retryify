@@ -1,6 +1,6 @@
 {
   "name": "retryify",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Wrap a function to retry on specific errors",
   "main": "index.js",
   "license": "MIT",
@@ -35,24 +35,19 @@
   },
   "scripts": {
     "test": "ava",
+    "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
-    "cover": "nyc npm test -s && nyc report --reporter=text-lcov > .nyc_output/coverage.lcov",
+    "cover": "nyc npm test -s",
     "readme": "jsdoc2md index.js > README.md"
   },
   "dependencies": {
     "bluebird": "^3.4.6"
   },
   "devDependencies": {
-    "ava": "^0.17.0",
+    "ava": "^0.18.0",
     "eslint": "^3.8.1",
     "eslint-config-smartcar": "^2.0.0",
     "jsdoc-to-markdown": "^2.0.1",
     "nyc": "^10.0.0"
-  },
-  "eslintConfig": {
-    "extends": "smartcar",
-    "env": {
-      "es6": true
-    }
   }
 }

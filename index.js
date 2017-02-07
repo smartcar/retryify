@@ -213,25 +213,26 @@ var retryify = function(options) {
 
     // Wrapper function. Returned in place of the passed in function
     var doRetry = function() {
+
       // do an inline copy to avoid leaking the arguments object.
       // https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#32-leaking-arguments
       var args = new Array(arguments.length);
       for (var i = 0; i < args.length; ++i) {
-        args[i] = arguments[i];
+        args[i] = arguments[i]; // eslint-disable-line prefer-rest-params
       }
 
       var context = {
         fn: Promise.method(fn),
         fnName: fn.name,
-        args: args,
         // Make sure `this` is preserved when executing the wrapped function
         fnThis: getOpt(this, null),
+        args,
         attempts: 0,
-        retries: retries,
-        timeout: timeout,
-        factor: factor,
-        errors: errors,
-        log: log,
+        retries,
+        timeout,
+        factor,
+        errors,
+        log,
       };
 
       return retryRec(context);
