@@ -1,8 +1,7 @@
-// Lint settings to support 'import' and 'export' for AVA tests
+// Lint settings to support 'async' and 'await' for AVA tests
 
 module.exports = {
   parserOptions: {
     ecmaVersion: 2017,
-    sourceType: 'module',
   },
 };
