@@ -1,7 +1,9 @@
-import test from 'ava';
-import util from 'util';
-import Promise from 'bluebird';
-import retryLib from '../index';
+'use strict';
+
+const test = require('ava');
+const util = require('util');
+const Promise = require('bluebird');
+const retryLib = require('../index');
 
 const retryify = retryLib({
   retries: 2,
@@ -11,6 +13,13 @@ const retryify = retryLib({
 
 // MUST GET 100% COVERAGE (ノ._.)ノ
 retryLib();
+
+test('function passed to setup function', function(t) {
+
+  const err = t.throws(() => retryLib(() => 1), TypeError);
+  t.is(err.message, 'options object expected but was passed a function');
+
+});
 
 test('no times, standard fn', async function(t) {
   const addABC = retryify(function(a, b, c) {

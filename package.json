@@ -1,6 +1,6 @@
 {
   "name": "retryify",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Wrap a function to retry on specific errors",
   "main": "index.js",
   "license": "MIT",
@@ -38,7 +38,7 @@
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
     "cover": "nyc npm test -s",
-    "readme": "jsdoc2md index.js > README.md"
+    "readme": "jsdoc2md --example-lang js --template readme.hbs index.js | sed 's/[\t ]*$//g' > readme.md"
   },
   "dependencies": {
     "bluebird": "^3.4.6"

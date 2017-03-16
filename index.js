@@ -171,10 +171,20 @@ retryRec = function(context) {
  * @param {Function} [options.log] Logging function that takes a message as
  *   its first parameter.
  *
+ * @throws TypeError when function is passed instead of options object.
+ * To use retryify it first must be "constructed" by passing in an options
+ * object and the returned function is what is supposed to take the function
+ * to retry.
+ *
  * @return {Function} {@link retryWrapper} A decorator function that wraps a
  *   a function to turn it into a retry-enabled function.
  */
 var retryify = function(options) {
+
+  if (typeof options === 'function') {
+    throw new TypeError('options object expected but was passed a function');
+  }
+
   var _options = options || {};
   _options.retries = getOpt(_options.retries, 3);
   _options.timeout = getOpt(_options.timeout, 300);

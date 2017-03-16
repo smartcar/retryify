@@ -45,10 +45,11 @@ get('http://google.com')
 ```
 
 * [retryify](#module_retryify)
-  * [~retryify([options])](#module_retryify..retryify) ⇒ <code>function</code>
-    * [~retryWrapper([innerOptions], fn)](#module_retryify..retryify..retryWrapper) ⇒ <code>function</code>
+    * [~retryify([options])](#module_retryify..retryify) ⇒ <code>function</code>
+        * [~retryWrapper([innerOptions], fn)](#module_retryify..retryify..retryWrapper) ⇒ <code>function</code>
 
 <a name="module_retryify..retryify"></a>
+
 ### retryify~retryify([options]) ⇒ <code>function</code>
 Retry module setup function. Takes an options object that configures the
 default retry options.
@@ -56,6 +57,13 @@ default retry options.
 **Kind**: inner method of <code>[retryify](#module_retryify)</code>
 **Returns**: <code>function</code> - [retryWrapper](retryWrapper) A decorator function that wraps a
   a function to turn it into a retry-enabled function.
+**Throws**:
+
+- TypeError when function is passed instead of options object.
+To use retryify it first must be "constructed" by passing in an options
+object and the returned function is what is supposed to take the function
+to retry.
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -67,6 +75,7 @@ default retry options.
 | [options.log] | <code>function</code> |  | Logging function that takes a message as   its first parameter. |
 
 <a name="module_retryify..retryify..retryWrapper"></a>
+
 #### retryify~retryWrapper([innerOptions], fn) ⇒ <code>function</code>
 retryify function decorator. Allows configuration on a function by function
 basis.
