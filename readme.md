@@ -59,9 +59,10 @@ default retry options.
   a function to turn it into a retry-enabled function.
 **Throws**:
 
-- TypeError when function is passed instead of options object. This
-guards against the common mistake of assuming the default export is the
-retryifyer
+- TypeError when function is passed instead of options object.
+To use retryify it first must be "constructed" by passing in an options
+object and the returned function is what is supposed to take the function
+to retry.
 
 
 | Param | Type | Default | Description |
