@@ -171,9 +171,10 @@ retryRec = function(context) {
  * @param {Function} [options.log] Logging function that takes a message as
  *   its first parameter.
  *
- * @throws TypeError when function is passed instead of options object. This
- * guards against the common mistake of assuming the default export is the
- * retryifyer
+ * @throws TypeError when function is passed instead of options object.
+ * To use retryify it first must be "constructed" by passing in an options
+ * object and the returned function is what is supposed to take the function
+ * to retry.
  *
  * @return {Function} {@link retryWrapper} A decorator function that wraps a
  *   a function to turn it into a retry-enabled function.
