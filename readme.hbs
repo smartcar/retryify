@@ -1,11 +1,52 @@
 # retryify [![NPM version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Coverage Status][coverage-image]][coverage-url]
 
-{{#orphans ~}}
-{{>body}}
-{{>member-index~}}
-{{>separator~}}
-{{>members~}}
-{{/orphans~}}
+Quickly and easily wrap functions to make them retry when they fail. Uses
+bluebird promises for maximum convenience!
+
+## Installation
+
+```bash
+$ npm install retryify
+```
+
+## Example
+```js
+// create a new retryify wrapper with some options set.
+const retryify = require('retryify')({
+  retries: 5,
+  timeout: 1000,
+  factor: 2,
+  errors: [RequestError, StatusCodeError],
+  log: function(msg) { console.log(msg); },
+});
+
+// promisified request library
+const request = require('request-promise');
+
+// get will now retry each time it catches a RequestError or a
+// StatusCodeError, it retries 5 times, or the request finally resolves
+// successfully.
+const get = retryify(function(url) {
+  return request(url);
+});
+
+// or, add some custom options for this specific function
+const post = retryify({
+  retries: 10
+}, function(url, data) {
+  return request({
+    uri: url,
+    method: 'POST',
+  });
+});
+
+// send the request, but retry if it fails.
+get('http://google.com')
+  .then(...)
+  .catch(...);
+```
+
+{{>all-docs}}
 
 [npm-url]: https://www.npmjs.com/package/retryify
 [npm-image]: https://img.shields.io/npm/v/retryify.svg?style=flat-square

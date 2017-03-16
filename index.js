@@ -1,51 +1,3 @@
-/**
- * Quickly and easily wrap functions to make them retry when they fail. Uses
- * bluebird promises for maximum convenience!
- *
- * ### Installation
- *
- *     $ npm install retryify
- *
- *
- * @module retryify
- *
- * @example
- * // create a new retryify wrapper with some options set.
- * var retryify = require('retryify')({
- *   retries: 5,
- *   timeout: 1000,
- *   factor: 2,
- *   errors: [RequestError, StatusCodeError],
- *   log: function(msg) { console.log(msg); },
- * });
- *
- * // promisified request library
- * var request = require('request-promise');
- *
- * // get will now retry each time it catches a RequestError or a
- * // StatusCodeError, it retries 5 times, or the request finally resolves
- * // successfully.
- * var get = retryify(function(url) {
- *   return request(url);
- * });
- *
- * // or, add some custom options for this specific function
- * var post = retryify({
- *   retries: 10
- * }, function(url, data) {
- *   return request({
- *     uri: url,
- *     method: 'POST',
- *   });
- * });
- *
- * // send the request, but retry if it fails.
- * get('http://google.com')
- *   .then(...)
- *   .catch(...);
- *
- */
-
 'use strict';
 
 var Promise = require('bluebird');
@@ -153,24 +105,27 @@ retryRec = function(context) {
 };
 
 /**
- * Retry module setup function. Takes an options object that configures the
- * default retry options.
- *
- * @param {Options} [options] Optional configuration object
- * @param {Number} [options.retries=3] Number of times to retry a wrapped
+ * @typedef Options
+ * @type {Object}
+ * @property {Number} [options.retries=3] Number of times to retry a wrapped
  *   function
- * @param {Number} [options.timeout=300] Amount of time to wait between retries
- * @param {Number} [options.factor=2] The exponential factor to scale the
+ * @property {Number} [options.timeout=300] Amount of time to wait between retries
+ * @property {Number} [options.factor=2] The exponential factor to scale the
  *   timeout by every retry iteration. For example: with a factor of 2 and a
  *   timeout of 100 ms, the first retry will fire after 100 ms, the second
  *   after 200 ms, the third after 400 ms, etc.... The formula used to
  *   calculate the delay between each retry:
  *   ```timeout * Math.pow(factor, attempts)```
- * @param {(Error|Error[])} [options.errors=Error] A single Error or an
+ * @property {(Error|Error[])} [options.errors=Error] A single Error or an
  *   array Errors that trigger a retry when caught
- * @param {Function} [options.log] Logging function that takes a message as
- *   its first parameter.
+ * @property {Function} [options.log] Logging function that takes a message as
+ */
+
+/**
+ * Retry module setup function. Takes an options object that configures the
+ * default retry options.
  *
+ * @param {Options} [options] Optional configuration object
  * @throws TypeError when function is passed instead of options object.
  * To use retryify it first must be "constructed" by passing in an options
  * object and the returned function is what is supposed to take the function
@@ -196,7 +151,7 @@ var retryify = function(options) {
    * retryify function decorator. Allows configuration on a function by function
    * basis.
    *
-   * @param {Object} [innerOptions] Optional configuration object. Same
+   * @param {Options} [innerOptions] Optional configuration object. Same
    *   format as above.
    * @param {Function} fn The function to wrap. Will retry the function if any
    *   matching errors are caught.
