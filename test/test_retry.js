@@ -178,7 +178,7 @@ test('log should get called on retry', async function(t) {
 
   const fail = retryify({
     log: mockLog,
-  }, function fail() {
+  }, function throws() {
     return Promise.delay(5).then(function() {
       throw new Error();
     });

@@ -1,6 +1,6 @@
 {
   "name": "retryify",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Wrap a function to retry on specific errors",
   "main": "index.js",
   "license": "MIT",

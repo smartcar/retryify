@@ -109,7 +109,8 @@ retryRec = function(context) {
  * @type {Object}
  * @property {Number} [options.retries=3] Number of times to retry a wrapped
  *   function
- * @property {Number} [options.timeout=300] Amount of time to wait between retries
+ * @property {Number} [options.timeout=300] Amount of time to wait between
+ * retries
  * @property {Number} [options.factor=2] The exponential factor to scale the
  *   timeout by every retry iteration. For example: with a factor of 2 and a
  *   timeout of 100 ms, the first retry will fire after 100 ms, the second
