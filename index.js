@@ -1,7 +1,6 @@
 'use strict';
 
 var Promise = require('bluebird');
-var format = require('util').format;
 
 /**
  * Return _default if a field is undefined or null.
@@ -56,12 +55,11 @@ var onError = function(context, err) {
   // update the retry state
   context.attempts += 1;
 
-  var logMessage = format('retrying function %s in %s ms : attempts: %s',
-                          context.fnName ? context.fnName : '<Anonymous>',
-                          delay,
-                          context.attempts);
+  const name = context.fnName ? context.fnName : '<Anonymous>';
+  // eslint-disable-next-line max-len
+  const msg = `retrying function ${name} in ${delay} ms : attempts: ${context.attempts}`;
 
-  context.log(logMessage);
+  context.log(msg);
 
   // Try the wrapped function again in `context.timeout` milliseconds
   return Promise.delay(delay).then(function() {
