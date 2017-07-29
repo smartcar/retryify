@@ -48,6 +48,6 @@
     "eslint": "^3.8.1",
     "eslint-config-smartcar": "^2.0.0",
     "jsdoc-to-markdown": "^3.0.0",
-    "nyc": "^10.0.0"
+    "nyc": "^11.1.0"
   }
 }
