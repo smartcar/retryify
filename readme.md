@@ -1,4 +1,4 @@
-# retryify [![NPM version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Coverage Status][coverage-image]][coverage-url]
+# retryify [![NPM version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Coverage Status][coverage-image]][coverage-url] [![Greenkeeper][gk-image]][gk-url]
 
 Quickly and easily wrap functions to make them retry when they fail. Uses
 bluebird promises for maximum convenience!
@@ -65,7 +65,7 @@ to retry.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [options] | <code>[Options](#Options)</code> | Optional configuration object |
+| [options] | [<code>Options</code>](#Options) | Optional configuration object |
 
 <a name="retryify..retryWrapper"></a>
 
@@ -73,12 +73,12 @@ to retry.
 retryify function decorator. Allows configuration on a function by function
 basis.
 
-**Kind**: inner method of <code>[retryify](#retryify)</code>
+**Kind**: inner method of [<code>retryify</code>](#retryify)
 <br>**Returns**: <code>function</code> - The wrapped function.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [innerOptions] | <code>[Options](#Options)</code> | Optional configuration object. Same   format as above. |
+| [innerOptions] | [<code>Options</code>](#Options) | Optional configuration object. Same   format as above. |
 | fn | <code>function</code> | The function to wrap. Will retry the function if any   matching errors are caught. |
 
 <a name="Options"></a>
@@ -92,7 +92,7 @@ basis.
 | options.retries | <code>Number</code> | <code>3</code> | Number of times to retry a wrapped   function |
 | options.timeout | <code>Number</code> | <code>300</code> | Amount of time to wait between retries |
 | options.factor | <code>Number</code> | <code>2</code> | The exponential factor to scale the   timeout by every retry iteration. For example: with a factor of 2 and a   timeout of 100 ms, the first retry will fire after 100 ms, the second   after 200 ms, the third after 400 ms, etc.... The formula used to   calculate the delay between each retry:   ```timeout * Math.pow(factor, attempts)``` |
-| options.errors | <code>Error</code> &#124; <code>Array.&lt;Error&gt;</code> | <code>Error</code> | A single Error or an   array Errors that trigger a retry when caught |
+| options.errors | <code>Error</code> \| <code>Array.&lt;Error&gt;</code> | <code>Error</code> | A single Error or an   array Errors that trigger a retry when caught |
 | options.log | <code>function</code> |  | Logging function that takes a message as |
 
 
@@ -104,3 +104,6 @@ basis.
 
 [coverage-url]: https://codecov.io/gh/smartcar/retryify
 [coverage-image]: https://img.shields.io/codecov/c/github/smartcar/retryify/master.svg?style=flat-square
+
+[gk-url]: https://greenkeeper.io
+[gk-image]: https://badges.greenkeeper.io/smartcar/retryify.svg
