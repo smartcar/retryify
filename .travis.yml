@@ -34,4 +34,4 @@ jobs:
       install: npm install semantic-release
       script: skip
       after_success:
-        - TRAVIS_JOB_NUMBER="WORKAROUND.1" npm run release
+        - BUILD_LEADER_ID="4" npm run release
