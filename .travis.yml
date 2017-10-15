@@ -31,7 +31,4 @@ jobs:
   include:
     - stage: publish
       node_js: 8
-      install: npm install semantic-release
-      script: skip
-      after_success:
-        - BUILD_LEADER_ID="4" npm run release
+      script: npm run release

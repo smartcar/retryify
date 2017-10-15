@@ -1,6 +1,6 @@
 {
   "name": "retryify",
-  "version": "1.2.1",
+  "version": "0.0.0-semantic-relase",
   "description": "Wrap a function to retry on specific errors",
   "main": "index.js",
   "license": "MIT",
@@ -39,7 +39,7 @@
     "lint": "eslint . --cache",
     "cover": "nyc npm test -s",
     "readme": "jsdoc2md --template readme.hbs index.js | sed 's/[\\t ]\\+$//g;s/**\\(Returns\\|Throws\\|Params\\|Properties\\)/<br>**\\1/g' > readme.md",
-    "release": "semantic-release pre && npm publish && semantic-release post"
+    "release": "semantic-release"
   },
   "dependencies": {
     "bluebird": "^3.4.6"
@@ -49,6 +49,7 @@
     "eslint": "^4.6.1",
     "eslint-config-smartcar": "^2.0.0",
     "jsdoc-to-markdown": "^3.0.0",
-    "nyc": "^11.2.1"
+    "nyc": "^11.2.1",
+    "semantic-release": "^12.4.1"
   }
 }
