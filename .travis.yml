@@ -2,7 +2,7 @@ language:
   - node_js
 
 node_js:
-  - 7
+  - 8
   - 6
   - 4
 
@@ -17,7 +17,8 @@ cache:
     - .eslintcache
 
 install:
-  - npm update
+  # --save false flag needed b/c of https://github.com/npm/npm/issues/16901
+  - npm update --save false
   - npm prune
 
 script:
@@ -25,7 +26,7 @@ script:
   - npm run cover
 
 after_success:
-  - test $TRAVIS_NODE_VERSION = 6 && bash <(curl -s https://codecov.io/bash)
+  - test $TRAVIS_NODE_VERSION = 8 && bash <(curl -s https://codecov.io/bash)
 
 jobs:
   include:
