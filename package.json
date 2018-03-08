@@ -50,6 +50,6 @@
     "eslint-config-smartcar": "^2.0.0",
     "jsdoc-to-markdown": "^4.0.0",
     "nyc": "^11.2.1",
-    "semantic-release": "^12.4.1"
+    "semantic-release": "^15.0.0"
   }
 }
