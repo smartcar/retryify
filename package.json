@@ -50,7 +50,7 @@
     "eslint-config-smartcar": "^2.0.0",
     "greenkeeper-lockfile": "^1.15.1",
     "jsdoc-to-markdown": "^4.0.0",
-    "nyc": "^11.2.1",
+    "nyc": "^12.0.1",
     "semantic-release": "^15.0.0"
   }
 }
