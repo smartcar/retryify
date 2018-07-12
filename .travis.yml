@@ -2,9 +2,9 @@ language:
   - node_js
 
 node_js:
-  - 8
   - 6
-  - 4
+  - 8
+  - 10
 
 branches:
   except:
@@ -16,6 +16,7 @@ cache:
     - node_modules
     - .eslintcache
 
+before_install: dpkg --compare-versions `npm -v` ge 6.0 || npm i -g npm@latest
 install:
   # --save false flag needed b/c of https://github.com/npm/npm/issues/16901
   - npm update --save false
