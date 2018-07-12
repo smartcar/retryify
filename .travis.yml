@@ -16,9 +16,14 @@ cache:
     - node_modules
     - .eslintcache
 
-before_install: dpkg --compare-versions `npm -v` ge 6.0 || npm i -g npm@latest
+before_install:
+  - dpkg --compare-versions `npm -v` ge 6.0 || npm i -g npm@latest
+
 install:
-  - npm ci
+  - if [[ "$TRAVIS_BRANCH" = "greenkeeper/"* ]]; then npm install; else npm ci; fi
+
+before_script:
+  - greenkeeper-lockfile-update
 
 script:
   - npm test
@@ -26,6 +31,9 @@ script:
 
 after_success:
   - test $TRAVIS_NODE_VERSION = 8 && bash <(curl -s https://codecov.io/bash)
+
+after_script:
+ - greenkeeper-lockfile-upload
 
 jobs:
   include:
