@@ -1,13 +1,13 @@
 'use strict';
 
-var Promise = require('bluebird');
+const Promise = require('bluebird');
 
 /**
  * Return _default if a field is undefined or null.
  *
  * @private
  */
-var getOpt = function(option, _default) {
+const getOpt = function(option, _default) {
   if (option === undefined || option === null) {
     return _default;
   } else {
@@ -20,14 +20,8 @@ var getOpt = function(option, _default) {
  *
  * @private
  */
-var isMatchingError = function(err, userErrors) {
-  for (var i = 0; i < userErrors.length; i++) {
-    if (err instanceof userErrors[i]) {
-      return true;
-    }
-  }
-
-  return false;
+const isMatchingError = function(err, userErrors) {
+  return userErrors.some((userError) => err instanceof userError);
 };
 
 // Declare ahead. retryRec and onError are mutually recursive.
@@ -44,13 +38,13 @@ var retryRec;
  * @return {Promise} a delayed Promise that retries the wrapped function if a
  *   matching error is found. Otherwise, a rejected Promise.
  */
-var onError = function(context, err) {
+const onError = function(context, err) {
   if (!isMatchingError(err, context.errors)) {
     // doens't match any user errors. reject the error down the chain
     return Promise.reject(err);
   }
 
-  var delay = context.timeout * Math.pow(context.factor, context.attempts);
+  const delay = context.timeout * Math.pow(context.factor, context.attempts);
 
   // update the retry state
   context.attempts += 1;
@@ -64,9 +58,7 @@ var onError = function(context, err) {
   context.log(msg);
 
   // Try the wrapped function again in `context.timeout` milliseconds
-  return Promise.delay(delay).then(function() {
-    return retryRec(context);
-  });
+  return Promise.delay(delay).then(() => retryRec(context));
 };
 
 /**
@@ -89,7 +81,7 @@ var onError = function(context, err) {
  *   resolves to.
  */
 retryRec = function(context) {
-  var result;
+  let result;
 
   // Base case: last attempt
   if (context.attempts === context.retries) {
@@ -98,9 +90,7 @@ retryRec = function(context) {
   } else {
     // try the function. if we catch anything, wait, then retry
     result = context.fn.apply(context.fnThis, context.args);
-    return Promise.resolve(result).catch(function(err) {
-      return onError(context, err);
-    });
+    return Promise.resolve(result).catch((err) => onError(context, err));
   }
 };
 
@@ -135,12 +125,12 @@ retryRec = function(context) {
  * @return {Function} {@link retryWrapper} A decorator function that wraps a
  *   a function to turn it into a retry-enabled function.
  */
-var retryify = function(options) {
+const retryify = function(options) {
   if (typeof options === 'function') {
     throw new TypeError('options object expected but was passed a function');
   }
 
-  var _options = options || {};
+  const _options = options || {};
   _options.retries = getOpt(_options.retries, 3);
   _options.timeout = getOpt(_options.timeout, 300);
   _options.factor = getOpt(_options.factor, 2);
@@ -160,38 +150,31 @@ var retryify = function(options) {
    *
    * @return {Function} The wrapped function.
    */
-  var retryWrapper = function(innerOptions, fn) {
+  const retryWrapper = function(innerOptions, fn) {
     if (innerOptions instanceof Function) {
       fn = innerOptions;
       innerOptions = null;
     }
 
-    var _innerOptions = innerOptions || {};
+    const _innerOptions = innerOptions || {};
 
-    var retries = getOpt(_innerOptions.retries, _options.retries);
-    var timeout = getOpt(_innerOptions.timeout, _options.timeout);
-    var factor = getOpt(_innerOptions.factor, _options.factor);
-    var errors = getOpt(_innerOptions.errors, _options.errors);
-    var log = getOpt(_innerOptions.log, _options.log);
+    const retries = getOpt(_innerOptions.retries, _options.retries);
+    const timeout = getOpt(_innerOptions.timeout, _options.timeout);
+    const factor = getOpt(_innerOptions.factor, _options.factor);
+    let errors = getOpt(_innerOptions.errors, _options.errors);
+    const log = getOpt(_innerOptions.log, _options.log);
 
     if (!(errors instanceof Array)) {
       errors = [errors];
     }
 
     // Wrapper function. Returned in place of the passed in function
-    var doRetry = function() {
-      // do an inline copy to avoid leaking the arguments object.
-      // https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#32-leaking-arguments
-      var args = new Array(arguments.length);
-      for (var i = 0; i < args.length; ++i) {
-        args[i] = arguments[i]; // eslint-disable-line prefer-rest-params
-      }
-
-      var context = {
+    const doRetry = function(...args) {
+      const context = {
         fn: Promise.method(fn),
         fnName: fn.name,
         // Make sure `this` is preserved when executing the wrapped function
-        fnThis: getOpt(this, null),
+        fnThis: this,
         args,
         attempts: 0,
         retries,
