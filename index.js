@@ -57,7 +57,9 @@ var onError = function(context, err) {
 
   const name = context.fnName ? context.fnName : '<Anonymous>';
   // eslint-disable-next-line max-len
-  const msg = `retrying function ${name} in ${delay} ms : attempts: ${context.attempts}`;
+  const msg = `retrying function ${name} in ${delay} ms : attempts: ${
+    context.attempts
+  }`;
 
   context.log(msg);
 
@@ -134,7 +136,6 @@ retryRec = function(context) {
  *   a function to turn it into a retry-enabled function.
  */
 var retryify = function(options) {
-
   if (typeof options === 'function') {
     throw new TypeError('options object expected but was passed a function');
   }
@@ -144,7 +145,9 @@ var retryify = function(options) {
   _options.timeout = getOpt(_options.timeout, 300);
   _options.factor = getOpt(_options.factor, 2);
   _options.errors = getOpt(_options.errors, Error);
-  _options.log = getOpt(_options.log, function() { /* empty */ });
+  _options.log = getOpt(_options.log, function() {
+    /* empty */
+  });
 
   /**
    * retryify function decorator. Allows configuration on a function by function
@@ -177,7 +180,6 @@ var retryify = function(options) {
 
     // Wrapper function. Returned in place of the passed in function
     var doRetry = function() {
-
       // do an inline copy to avoid leaking the arguments object.
       // https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#32-leaking-arguments
       var args = new Array(arguments.length);
