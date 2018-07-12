@@ -18,9 +18,7 @@ cache:
 
 before_install: dpkg --compare-versions `npm -v` ge 6.0 || npm i -g npm@latest
 install:
-  # --save false flag needed b/c of https://github.com/npm/npm/issues/16901
-  - npm update --save false
-  - npm prune
+  - npm ci
 
 script:
   - npm test
