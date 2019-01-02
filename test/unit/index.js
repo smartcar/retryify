@@ -3,7 +3,7 @@
 const test = require('ava');
 const util = require('util');
 const Promise = require('bluebird');
-const retryLib = require('../index');
+const retryLib = require('../../index');
 
 const retryify = retryLib({
   retries: 2,
