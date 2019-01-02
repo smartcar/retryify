@@ -42,15 +42,15 @@
     "release": "semantic-release"
   },
   "dependencies": {
-    "bluebird": "^3.4.6"
+    "bluebird": "^3.5.3"
   },
   "devDependencies": {
     "ava": "^1.0.1",
-    "eslint": "^5.0.0",
+    "eslint": "^5.11.1",
     "eslint-config-smartcar": "^3.0.0",
     "greenkeeper-lockfile": "^1.15.1",
     "jsdoc-to-markdown": "^4.0.0",
-    "nyc": "^12.0.1",
-    "semantic-release": "^15.0.0"
+    "nyc": "^13.1.0",
+    "semantic-release": "^15.13.2"
   }
 }
