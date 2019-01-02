@@ -118,7 +118,7 @@ test('always error, promise fn', async function(t) {
     {retries}
   );
 
-  const err = await t.throws(fail());
+  const err = await t.throwsAsync(fail());
   t.is(err.message, 'Fail!');
 });
 
@@ -185,7 +185,7 @@ test("error doesn't match user defined error", async function(t) {
     }
   );
 
-  await t.throws(fail(), FooError);
+  await t.throwsAsync(fail(), FooError);
   t.is(count, 1);
 });
 
@@ -208,6 +208,6 @@ test('log should get called on retry', async function(t) {
   );
 
   t.false(wasCalled, 'mockLog should not be called at this point.');
-  await t.throws(fail());
+  await t.throwsAsync(fail());
   t.true(wasCalled, 'mockLog should get called at some point.');
 });
