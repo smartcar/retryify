@@ -45,7 +45,7 @@
     "bluebird": "^3.5.5"
   },
   "devDependencies": {
-    "ava": "^1.4.1",
+    "ava": "^2.0.0",
     "eslint": "^5.16.0",
     "eslint-config-smartcar": "^3.0.0",
     "greenkeeper-lockfile": "^1.15.1",
