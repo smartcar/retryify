@@ -38,19 +38,18 @@
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
     "cover": "nyc npm test -s",
-    "readme": "jsdoc2md --template readme.hbs index.js | sed 's/[\\t ]\\+$//g;s/**\\(Returns\\|Throws\\|Params\\|Properties\\)/<br>**\\1/g' > readme.md",
-    "release": "semantic-release"
+    "readme": "jsdoc2md --template readme.hbs index.js | sed 's/[\\t ]\\+$//g;s/**\\(Returns\\|Throws\\|Params\\|Properties\\)/<br>**\\1/g' > readme.md"
   },
   "dependencies": {
     "bluebird": "^3.5.5"
   },
   "devDependencies": {
-    "ava": "^1.4.1",
-    "eslint": "^5.16.0",
+    "ava": "^2.2.0",
+    "eslint": "^6.1.0",
     "eslint-config-smartcar": "^3.0.0",
     "greenkeeper-lockfile": "^1.15.1",
     "jsdoc-to-markdown": "^5.0.0",
     "nyc": "^14.1.1",
-    "semantic-release": "^15.13.12"
+    "semantic-release": "^15.13.18"
   }
 }
