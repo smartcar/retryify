@@ -37,4 +37,4 @@ jobs:
   include:
     - stage: publish
       node_js: 10
-      script: npm run release
+      script: semantic-release
