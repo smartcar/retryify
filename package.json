@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "ava": "^2.2.0",
-    "eslint": "^6.1.0",
+    "eslint": "^6.6.0",
     "eslint-config-smartcar": "^3.0.0",
     "greenkeeper-lockfile": "^1.15.1",
     "jsdoc-to-markdown": "^5.0.0",
