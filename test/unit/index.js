@@ -2,8 +2,10 @@
 
 const test = require('ava');
 const util = require('util');
-const Promise = require('bluebird');
 const retryLib = require('../../index');
+
+// Promise.delay without bluebird
+const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 const retryify = retryLib({
   retries: 2,
@@ -34,7 +36,7 @@ test('no times, standard fn', async function(t) {
 test('no times, promise fn', async function(t) {
   const addABC = retryify(
     function(a, b, c) {
-      return Promise.delay(5).then(function() {
+      return delay(5).then(function() {
         return a + b + c;
       });
     },
@@ -69,7 +71,7 @@ test('once, error on first call, promise fn', async function(t) {
 
   const addFail = retryify(
     function(a, b, c) {
-      return Promise.delay(5).then(function() {
+      return delay(5).then(function() {
         if (retries > 0) {
           retries -= 1;
           throw new Error('Oh no! The promise failed :0');
@@ -90,7 +92,7 @@ test('twice, error on first call, promise fn', async function(t) {
 
   const addFail = retryify(
     function(a, b, c) {
-      return Promise.delay(5).then(function() {
+      return delay(5).then(function() {
         if (retries > 0) {
           retries -= 1;
           throw new Error('Oh no! The promise failed :0');
@@ -111,7 +113,7 @@ test('always error, promise fn', async function(t) {
 
   const fail = retryify(
     function() {
-      return Promise.delay(5).then(function() {
+      return delay(5).then(function() {
         throw new Error('Fail!');
       });
     },
@@ -125,7 +127,7 @@ test('always error, promise fn', async function(t) {
 test('retries but never error, promise fn', async function(t) {
   const addABC = retryify(
     function(a, b, c) {
-      return Promise.delay(5).then(function() {
+      return delay(5).then(function() {
         return a + b + c;
       });
     },
@@ -143,7 +145,7 @@ test('promise fn with `this` bound', async function(t) {
 
   Foo.prototype.fooer = retryify(function(a, b, c) {
     t.is(this.foo, 'this is a foo');
-    return Promise.delay(5).then(() => [this.foo, a, b, c].join(' '));
+    return delay(5).then(() => [this.foo, a, b, c].join(' '));
   });
 
   const aFoo = new Foo();
@@ -178,7 +180,7 @@ test("error doesn't match user defined error", async function(t) {
       errors: [BarError, BazError],
     },
     function() {
-      return Promise.delay(5).then(function() {
+      return delay(5).then(function() {
         count += 1;
         throw new FooError();
       });
@@ -201,7 +203,7 @@ test('log should get called on retry', async function(t) {
       log: mockLog,
     },
     function throws() {
-      return Promise.delay(5).then(function() {
+      return delay(5).then(function() {
         throw new Error();
       });
     },

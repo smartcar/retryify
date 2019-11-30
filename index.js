@@ -1,7 +1,5 @@
 'use strict';
 
-const Promise = require('bluebird');
-
 /**
  * Return _default if a field is undefined or null.
  *
@@ -38,10 +36,10 @@ var retryRec;
  * @return {Promise} a delayed Promise that retries the wrapped function if a
  *   matching error is found. Otherwise, a rejected Promise.
  */
-const onError = function(context, err) {
+const onError = async function(context, err) {
   if (!isMatchingError(err, context.errors)) {
     // doens't match any user errors. reject the error down the chain
-    return Promise.reject(err);
+    throw err;
   }
 
   const delay = context.timeout * Math.pow(context.factor, context.attempts);
@@ -51,14 +49,13 @@ const onError = function(context, err) {
 
   const name = context.fnName ? context.fnName : '<Anonymous>';
   // eslint-disable-next-line max-len
-  const msg = `retrying function ${name} in ${delay} ms : attempts: ${
-    context.attempts
-  }`;
+  const msg = `retrying function ${name} in ${delay} ms : attempts: ${context.attempts}`;
 
   context.log(msg);
 
   // Try the wrapped function again in `context.timeout` milliseconds
-  return Promise.delay(delay).then(() => retryRec(context));
+  await new Promise((resolve) => setTimeout(resolve, delay));
+  return await retryRec(context);
 };
 
 /**
@@ -80,17 +77,17 @@ const onError = function(context, err) {
  * @return {Promise} a Promise for whatever the wrapped function eventually
  *   resolves to.
  */
-retryRec = function(context) {
-  let result;
-
+retryRec = async function(context) {
   // Base case: last attempt
   if (context.attempts === context.retries) {
-    result = context.fn.apply(context.fnThis, context.args);
-    return Promise.resolve(result);
+    return await context.fn.apply(context.fnThis, context.args);
   } else {
     // try the function. if we catch anything, wait, then retry
-    result = context.fn.apply(context.fnThis, context.args);
-    return Promise.resolve(result).catch((err) => onError(context, err));
+    try {
+      return await context.fn.apply(context.fnThis, context.args);
+    } catch (err) {
+      return await onError(context, err);
+    }
   }
 };
 
@@ -171,7 +168,7 @@ const retryify = function(options) {
     // Wrapper function. Returned in place of the passed in function
     const doRetry = function(...args) {
       const context = {
-        fn: Promise.method(fn),
+        fn,
         fnName: fn.name,
         // Make sure `this` is preserved when executing the wrapped function
         fnThis: this,
