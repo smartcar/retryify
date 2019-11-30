@@ -21,7 +21,6 @@
     "retryify",
     "retry",
     "promise",
-    "bluebird",
     "decorator",
     "wrapper",
     "timeout",
@@ -40,9 +39,7 @@
     "cover": "nyc npm test -s",
     "readme": "jsdoc2md --template readme.hbs index.js | sed 's/[\\t ]\\+$//g;s/**\\(Returns\\|Throws\\|Params\\|Properties\\)/<br>**\\1/g' > readme.md"
   },
-  "dependencies": {
-    "bluebird": "^3.7.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "ava": "^2.2.0",
     "eslint": "^6.7.2",
