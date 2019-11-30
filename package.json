@@ -41,15 +41,15 @@
     "readme": "jsdoc2md --template readme.hbs index.js | sed 's/[\\t ]\\+$//g;s/**\\(Returns\\|Throws\\|Params\\|Properties\\)/<br>**\\1/g' > readme.md"
   },
   "dependencies": {
-    "bluebird": "^3.5.5"
+    "bluebird": "^3.7.2"
   },
   "devDependencies": {
     "ava": "^2.2.0",
-    "eslint": "^6.6.0",
+    "eslint": "^6.7.2",
     "eslint-config-smartcar": "^3.0.0",
     "greenkeeper-lockfile": "^1.15.1",
-    "jsdoc-to-markdown": "^5.0.0",
+    "jsdoc-to-markdown": "^5.0.3",
     "nyc": "^14.1.1",
-    "semantic-release": "^15.13.18"
+    "semantic-release": "^15.13.31"
   }
 }
