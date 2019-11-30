@@ -22,45 +22,9 @@ const isMatchingError = function(err, userErrors) {
   return userErrors.some((userError) => err instanceof userError);
 };
 
-// Declare ahead. retryRec and onError are mutually recursive.
-var retryRec;
-
 /**
- * Called if the wrapped function throws an error
- *
- * @private
- *
- * @param {Object} context the context the wrapped function is called in
- * @param {Error} err the error caught while evaluating the wrapped function
- *
- * @return {Promise} a delayed Promise that retries the wrapped function if a
- *   matching error is found. Otherwise, a rejected Promise.
- */
-const onError = async function(context, err) {
-  if (!isMatchingError(err, context.errors)) {
-    // doens't match any user errors. reject the error down the chain
-    throw err;
-  }
-
-  const delay = context.timeout * Math.pow(context.factor, context.attempts);
-
-  // update the retry state
-  context.attempts += 1;
-
-  const name = context.fnName ? context.fnName : '<Anonymous>';
-  // eslint-disable-next-line max-len
-  const msg = `retrying function ${name} in ${delay} ms : attempts: ${context.attempts}`;
-
-  context.log(msg);
-
-  // Try the wrapped function again in `context.timeout` milliseconds
-  await new Promise((resolve) => setTimeout(resolve, delay));
-  return await retryRec(context);
-};
-
-/**
- * Recursively evalutates the wrapped function until it throws a
- * non-matching error, resolves, or runs out of retry attempts.
+ * Evaluates the wrapped function until it throws a non-matching error,
+ * resolves, or runs out of retry attempts.
  *
  * @private
  *
@@ -68,7 +32,6 @@ const onError = async function(context, err) {
  * @param {Function} context.fn the wrapped function
  * @param {...*} context.args the arguments the wrapped function was called with
  * @param {*} context.fnThis the `this` originally bound to `fn`
- * @param {Number} context.attempts # of attempts made to retry the function
  * @param {Number} context.retries # of times to retry the wrapped function
  * @param {Number} context.timeout time to wait between retries (in ms)
  * @param {Number} context.factor the exponential scaling factor
@@ -77,17 +40,55 @@ const onError = async function(context, err) {
  * @return {Promise} a Promise for whatever the wrapped function eventually
  *   resolves to.
  */
-retryRec = async function(context) {
-  // Base case: last attempt
-  if (context.attempts === context.retries) {
-    return await context.fn.apply(context.fnThis, context.args);
-  } else {
-    // try the function. if we catch anything, wait, then retry
+const execute = async function(context) {
+  /**
+   * The first attempt of executing the function shouldn't count as a "retry"
+   * since it is the initial execution. Successive executions of the function
+   * should count as actual "retries".
+   *
+   * In order to achieve this, retries is incremented at the end of each loop
+   * iteration as opposed to the beginning of each loop iteration.
+   */
+  let retries = 0;
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    /* eslint-disable no-await-in-loop */
+
     try {
       return await context.fn.apply(context.fnThis, context.args);
     } catch (err) {
-      return await onError(context, err);
+      if (retries === context.retries) {
+        throw err;
+      }
+
+      if (!isMatchingError(err, context.errors)) {
+        throw err;
+      }
+
+      /**
+       * The first execution of the function doesn't count as a retry,
+       * but should count as an attempt
+       */
+      const attempts = retries + 1;
+
+      /**
+       * The first "delay" should be equal to "timeout", every successive delay
+       * should be some multiple of timeout.
+       *
+       * In order to achieve this, we use "retries" as the exponent rather than
+       * "attempts".
+       */
+      const delay = context.timeout * Math.pow(context.factor, retries);
+
+      const msg = `retrying function ${context.fnName} in ${delay} ms : attempts: ${attempts}`;
+      context.log(msg);
+
+      await new Promise((resolve) => setTimeout(resolve, delay));
+
+      retries += 1;
     }
+    /* eslint-enable */
   }
 };
 
@@ -169,11 +170,10 @@ const retryify = function(options) {
     const doRetry = function(...args) {
       const context = {
         fn,
-        fnName: fn.name,
+        fnName: fn.name || '<Anonymous>',
         // Make sure `this` is preserved when executing the wrapped function
         fnThis: this,
         args,
-        attempts: 0,
         retries,
         timeout,
         factor,
@@ -181,7 +181,7 @@ const retryify = function(options) {
         log,
       };
 
-      return retryRec(context);
+      return execute(context);
     };
 
     return doRetry;
