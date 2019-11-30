@@ -1,8 +1,6 @@
 # retryify [![NPM version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Coverage Status][coverage-image]][coverage-url] [![Greenkeeper][gk-image]][gk-url]
 
-Quickly and easily wrap functions to make them retry when they fail. Uses
-bluebird promises for maximum convenience!
-
+Quickly and easily wrap functions to make them retry when they fail.
 ## Installation
 
 ```bash
