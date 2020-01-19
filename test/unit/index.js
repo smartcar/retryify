@@ -17,7 +17,9 @@ const retryify = retryLib({
 retryLib();
 
 test('function passed to setup function', function(t) {
-  const err = t.throws(() => retryLib(() => 1), TypeError);
+  const err = t.throws(() => retryLib(() => 1), {
+    instanceOf: TypeError,
+  });
   t.is(err.message, 'options object expected but was passed a function');
 });
 
@@ -187,7 +189,9 @@ test("error doesn't match user defined error", async function(t) {
     },
   );
 
-  await t.throwsAsync(fail(), FooError);
+  await t.throwsAsync(fail(), {
+    instanceOf: FooError,
+  });
   t.is(count, 1);
 });
 
