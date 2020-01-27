@@ -47,6 +47,6 @@
     "greenkeeper-lockfile": "^1.15.1",
     "jsdoc-to-markdown": "^5.0.3",
     "nyc": "^15.0.0",
-    "semantic-release": "^16.0.0"
+    "semantic-release": "^17.0.0"
   }
 }
