@@ -217,3 +217,42 @@ test('log should get called on retry', async function(t) {
   await t.throwsAsync(fail());
   t.true(wasCalled, 'mockLog should get called at some point.');
 });
+
+test('retry using retryOnSuccess', async function(t) {
+  let wasCalled = false;
+
+  const retryOnSuccess = function(res) {
+    wasCalled = true;
+    return res !== 2;
+  };
+
+  let count = 0;
+  const run = retryify({retryOnSuccess}, async function throws() {
+    return await delay(5).then(function() {
+      count += 1;
+      return count;
+    });
+  });
+  await run();
+  t.true(wasCalled, 'retryOnSuccess should be called');
+});
+
+test('retry using retryOnError', async function(t) {
+  let timesCalled = 0;
+
+  const retryOnError = function() {
+    timesCalled += 1;
+    return timesCalled !== 2;
+  };
+
+  class NewError extends Error {}
+
+  const run = retryify({retryOnError, errors: [NewError]}, async function throws() {
+    return await delay(5).then(function() {
+      throw Error();
+    });
+  });
+  await t.throwsAsync(run());
+  t.is(timesCalled, 2);
+
+});

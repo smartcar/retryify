@@ -36,6 +36,8 @@ const isMatchingError = function(err, userErrors) {
  * @param {Number} context.timeout time to wait between retries (in ms)
  * @param {Number} context.factor the exponential scaling factor
  * @param {Error[]} context.errors errors that when caught, trigger a retry
+ * @param {Function} context.retryOnSuccess when given a success response return true to retry
+ * @param {Function} context.retryOnError when given a error response return true to retry
  *
  * @return {Promise} a Promise for whatever the wrapped function eventually
  *   resolves to.
@@ -50,44 +52,46 @@ const execute = async function(context) {
    * iteration as opposed to the beginning of each loop iteration.
    */
   let retries = 0;
-
   // eslint-disable-next-line no-constant-condition
   while (true) {
     /* eslint-disable no-await-in-loop */
-
     try {
-      return await context.fn.apply(context.fnThis, context.args);
+      const res = await context.fn.apply(context.fnThis, context.args);
+      if (!context.retryOnSuccess(res)) {
+        return res;
+      }
     } catch (err) {
       if (retries === context.retries) {
         throw err;
       }
 
+      // try to match a error type, if not test retryOnError
       if (!isMatchingError(err, context.errors)) {
-        throw err;
+        if (!context.retryOnError(err)) {
+          throw err;
+        }
       }
+    }
 
-      /**
+    /**
        * The first execution of the function doesn't count as a retry,
        * but should count as an attempt
        */
-      const attempts = retries + 1;
+    const attempts = retries + 1;
 
-      /**
+    /**
        * The first "delay" should be equal to "timeout", every successive delay
        * should be some multiple of timeout.
        *
        * In order to achieve this, we use "retries" as the exponent rather than
        * "attempts".
        */
-      const delay = context.timeout * Math.pow(context.factor, retries);
+    const delay = context.timeout * Math.pow(context.factor, retries);
 
-      const msg = `retrying function ${context.fnName} in ${delay} ms : attempts: ${attempts}`;
-      context.log(msg);
+    const msg = `retrying function ${context.fnName} in ${delay} ms : attempts: ${attempts}`;
+    context.log(msg);
 
-      await new Promise((resolve) => setTimeout(resolve, delay));
-
-      retries += 1;
-    }
+    await new Promise((resolve) => setTimeout(resolve, delay)); retries += 1;
     /* eslint-enable */
   }
 };
@@ -108,6 +112,8 @@ const execute = async function(context) {
  * @property {(Error|Error[])} [options.errors=Error] A single Error or an
  *   array Errors that trigger a retry when caught
  * @property {Function} [options.log] Logging function that takes a message as
+ * @property {Function} [options.retryOnSuccess] when given a success response return true to retry
+ * @property {Function} [options.retryOnError] when given a error response return true to retry
  */
 
 /**
@@ -136,6 +142,8 @@ const retryify = function(options) {
   _options.log = getOpt(_options.log, function() {
     /* empty */
   });
+  _options.retryOnSuccess = getOpt(_options.retryOnSuccess, function() { return false; });
+  _options.retryOnError = getOpt(_options.retryOnError, function() { return false; });
 
   /**
    * retryify function decorator. Allows configuration on a function by function
@@ -161,6 +169,8 @@ const retryify = function(options) {
     const factor = getOpt(_innerOptions.factor, _options.factor);
     let errors = getOpt(_innerOptions.errors, _options.errors);
     const log = getOpt(_innerOptions.log, _options.log);
+    const retryOnSuccess = getOpt(_innerOptions.retryOnSuccess, _options.retryOnSuccess);
+    const retryOnError = getOpt(_innerOptions.retryOnError, _options.retryOnError);
 
     if (!(errors instanceof Array)) {
       errors = [errors];
@@ -178,6 +188,8 @@ const retryify = function(options) {
         timeout,
         factor,
         errors,
+        retryOnSuccess,
+        retryOnError,
         log,
       };
 
