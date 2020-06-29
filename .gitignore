@@ -1,22 +1,37 @@
-# Vim
-[._]*.s[a-w][a-z]
-[._]s[a-w][a-z]
-*.un~
-Session.vim
-.netrwhist
-*~
-
-# Logs
-logs
+# System generated files
 *.log
+*.lnk
+.DS_Store
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
 
-# Eslint
-.eslintcache
-
-# Coverage directory used by tools like istanbul
+# Node.js
+node_modules
 coverage
+jsdoc
+.eslintcache
 .nyc_output
 
-# Dependency directory
-# https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
-node_modules
+# Editors
+
+## Vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+
+## Vim
+*~
+.netrwhist
+Session.vim
+Sessionx.vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]*.un~
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+tags
