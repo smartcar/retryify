@@ -14,15 +14,6 @@ const getOpt = function(option, _default) {
 };
 
 /**
- * Check if the thrown error matches a user provided error.
- *
- * @private
- */
-const isMatchingError = function(err, userErrors) {
-  return userErrors.some((userError) => err instanceof userError);
-};
-
-/**
  * Evaluates the wrapped function until it throws a non-matching error,
  * resolves, or runs out of retry attempts.
  *
@@ -35,7 +26,8 @@ const isMatchingError = function(err, userErrors) {
  * @param {Number} context.retries # of times to retry the wrapped function
  * @param {Number} context.timeout time to wait between retries (in ms)
  * @param {Number} context.factor the exponential scaling factor
- * @param {Error[]} context.errors errors that when caught, trigger a retry
+ * @param {function} options.shouldRetry - Invoked with the thrown error,
+ * retryify will retry if this method returns true.
  *
  * @return {Promise} a Promise for whatever the wrapped function eventually
  *   resolves to.
@@ -62,7 +54,7 @@ const execute = async function(context) {
         throw err;
       }
 
-      if (!isMatchingError(err, context.errors)) {
+      if (!context.shouldRetry(err)) {
         throw err;
       }
 
@@ -105,8 +97,8 @@ const execute = async function(context) {
  *   after 200 ms, the third after 400 ms, etc.... The formula used to
  *   calculate the delay between each retry:
  *   ```timeout * Math.pow(factor, attempts)```
- * @property {(Error|Error[])} [options.errors=Error] A single Error or an
- *   array Errors that trigger a retry when caught
+ * @property {function} [options.shouldRetry=() => true] - Invoked with the
+ * thrown error, retryify will retry if this method returns true.
  * @property {Function} [options.log] Logging function that takes a message as
  */
 
@@ -131,10 +123,10 @@ const retryify = function(options = {}) {
   options.retries = getOpt(options.retries, 3);
   options.timeout = getOpt(options.timeout, 300);
   options.factor = getOpt(options.factor, 2);
-  options.errors = getOpt(options.errors, Error);
   options.log = getOpt(options.log, function() {
     /* empty */
   });
+  options.shouldRetry = getOpt(options.errors, () => true);
 
   /**
    * retryify function decorator. Allows configuration on a function by function
@@ -156,12 +148,8 @@ const retryify = function(options = {}) {
     const retries = getOpt(innerOptions.retries, options.retries);
     const timeout = getOpt(innerOptions.timeout, options.timeout);
     const factor = getOpt(innerOptions.factor, options.factor);
-    let errors = getOpt(innerOptions.errors, options.errors);
     const log = getOpt(innerOptions.log, options.log);
-
-    if (!(errors instanceof Array)) {
-      errors = [errors];
-    }
+    const shouldRetry = getOpt(innerOptions.shouldRetry, options.shouldRetry);
 
     // Wrapper function. Returned in place of the passed in function
     const doRetry = function(...args) {
@@ -174,7 +162,7 @@ const retryify = function(options = {}) {
         retries,
         timeout,
         factor,
-        errors,
+        shouldRetry,
         log,
       };
 

@@ -179,7 +179,9 @@ test("error doesn't match user defined error", async function(t) {
 
   const fail = retryify(
     {
-      errors: [BarError, BazError],
+      shouldRetry(caught) {
+        return caught instanceof BazError;
+      },
     },
     function() {
       return delay(5).then(function() {
