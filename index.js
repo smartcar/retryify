@@ -114,7 +114,7 @@ const execute = async function(context) {
  * Retry module setup function. Takes an options object that configures the
  * default retry options.
  *
- * @param {Options} [options] Optional configuration object
+ * @param {Options} [options={}] Optional configuration object
  * @throws TypeError when function is passed instead of options object.
  * To use retryify it first must be "constructed" by passing in an options
  * object and the returned function is what is supposed to take the function
@@ -123,17 +123,16 @@ const execute = async function(context) {
  * @return {Function} {@link retryWrapper} A decorator function that wraps a
  *   a function to turn it into a retry-enabled function.
  */
-const retryify = function(options) {
+const retryify = function(options = {}) {
   if (typeof options === 'function') {
     throw new TypeError('options object expected but was passed a function');
   }
 
-  const _options = options || {};
-  _options.retries = getOpt(_options.retries, 3);
-  _options.timeout = getOpt(_options.timeout, 300);
-  _options.factor = getOpt(_options.factor, 2);
-  _options.errors = getOpt(_options.errors, Error);
-  _options.log = getOpt(_options.log, function() {
+  options.retries = getOpt(options.retries, 3);
+  options.timeout = getOpt(options.timeout, 300);
+  options.factor = getOpt(options.factor, 2);
+  options.errors = getOpt(options.errors, Error);
+  options.log = getOpt(options.log, function() {
     /* empty */
   });
 
@@ -151,16 +150,14 @@ const retryify = function(options) {
   const retryWrapper = function(innerOptions, fn) {
     if (innerOptions instanceof Function) {
       fn = innerOptions;
-      innerOptions = null;
+      innerOptions = {};
     }
 
-    const _innerOptions = innerOptions || {};
-
-    const retries = getOpt(_innerOptions.retries, _options.retries);
-    const timeout = getOpt(_innerOptions.timeout, _options.timeout);
-    const factor = getOpt(_innerOptions.factor, _options.factor);
-    let errors = getOpt(_innerOptions.errors, _options.errors);
-    const log = getOpt(_innerOptions.log, _options.log);
+    const retries = getOpt(innerOptions.retries, options.retries);
+    const timeout = getOpt(innerOptions.timeout, options.timeout);
+    const factor = getOpt(innerOptions.factor, options.factor);
+    let errors = getOpt(innerOptions.errors, options.errors);
+    const log = getOpt(innerOptions.log, options.log);
 
     if (!(errors instanceof Array)) {
       errors = [errors];
