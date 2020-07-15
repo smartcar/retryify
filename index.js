@@ -126,7 +126,7 @@ const retryify = function(options = {}) {
   options.log = getOpt(options.log, function() {
     /* empty */
   });
-  options.shouldRetry = getOpt(options.errors, () => true);
+  options.shouldRetry = getOpt(options.shouldRetry, () => true);
 
   /**
    * retryify function decorator. Allows configuration on a function by function
