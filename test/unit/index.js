@@ -9,6 +9,7 @@ const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 const retryify = retryLib({
   retries: 2,
+  initialDelay: 0,
   timeout: 5, // ms
   factor: 1.5,
 });
@@ -25,10 +26,10 @@ test('function passed to setup function', function(t) {
 
 test('no times, standard fn', async function(t) {
   const addABC = retryify(
+    {retries: 1},
     function(a, b, c) {
       return a + b + c;
     },
-    {retries: 0},
   );
 
   const sum = await addABC(1, 2, 3);
@@ -37,12 +38,12 @@ test('no times, standard fn', async function(t) {
 
 test('no times, promise fn', async function(t) {
   const addABC = retryify(
+    {retries: 0},
     function(a, b, c) {
       return delay(5).then(function() {
         return a + b + c;
       });
     },
-    {retries: 0},
   );
 
   const sum = await addABC(1, 2, 3);
@@ -53,6 +54,7 @@ test('once, error on first call, standard fn', async function(t) {
   let retries = 1;
 
   const addFail = retryify(
+    {retries},
     function(a, b, c) {
       if (retries > 0) {
         retries -= 1;
@@ -61,7 +63,6 @@ test('once, error on first call, standard fn', async function(t) {
         return a + b + c;
       }
     },
-    {retries},
   );
 
   const sum = await addFail(1, 2, 3);
@@ -72,6 +73,7 @@ test('once, error on first call, promise fn', async function(t) {
   let retries = 1;
 
   const addFail = retryify(
+    {retries},
     function(a, b, c) {
       return delay(5).then(function() {
         if (retries > 0) {
@@ -82,7 +84,6 @@ test('once, error on first call, promise fn', async function(t) {
         }
       });
     },
-    {retries},
   );
 
   const sum = await addFail(1, 2, 3);
@@ -93,6 +94,7 @@ test('twice, error on first call, promise fn', async function(t) {
   let retries = 2;
 
   const addFail = retryify(
+    {retries},
     function(a, b, c) {
       return delay(5).then(function() {
         if (retries > 0) {
@@ -103,7 +105,6 @@ test('twice, error on first call, promise fn', async function(t) {
         }
       });
     },
-    {retries},
   );
 
   const sum = await addFail(1, 2, 3);
@@ -114,12 +115,12 @@ test('always error, promise fn', async function(t) {
   const retries = 2;
 
   const fail = retryify(
+    {retries},
     function() {
       return delay(5).then(function() {
         throw new Error('Fail!');
       });
     },
-    {retries},
   );
 
   const err = await t.throwsAsync(fail());
@@ -128,12 +129,12 @@ test('always error, promise fn', async function(t) {
 
 test('retries but never error, promise fn', async function(t) {
   const addABC = retryify(
+    {retries: 3},
     function(a, b, c) {
       return delay(5).then(function() {
         return a + b + c;
       });
     },
-    {retries: 3},
   );
 
   const sum = await addABC(1, 2, 3);
@@ -218,4 +219,43 @@ test('log should get called on retry', async function(t) {
   t.false(wasCalled, 'mockLog should not be called at this point.');
   await t.throwsAsync(fail());
   t.true(wasCalled, 'mockLog should get called at some point.');
+});
+
+/**
+ * Test state before and after initialDelay
+ *
+ * Time(seconds):        0s .  .  .  1s .  .  .  2s .  .  .  3s
+ * areWeThereYet:        f                 t
+ * Testing checkpoints:  *     *     *  *      *
+ */
+
+test('initial delay', async function(t) {
+  const options = {
+    retries: 0,
+    initialDelay: 1500,
+  };
+
+  let areWeThereYet = false;
+
+  const weArrived = () => {
+    areWeThereYet = true;
+  };
+
+  retryify(options, weArrived)();
+
+  t.false(areWeThereYet); // 0 sec
+
+  await delay(500); // 0.5 sec
+  t.false(areWeThereYet);
+
+  await delay(500); // 1 sec
+  t.false(areWeThereYet);
+
+  await delay(250); // 1.25 sec
+  t.false(areWeThereYet);
+
+  // After 1.5 seconds, we are finally there
+  await delay(500); // 1.75
+  t.true(areWeThereYet);
+
 });
