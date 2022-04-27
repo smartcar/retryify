@@ -21,9 +21,9 @@ const getOpt = function(option, _default) {
  *
  * @param {Object} context the context the wrapped function is called in
  * @param {Function} context.fn the wrapped function
- * @param {...*} context.args the arguments the wrapped function was called with
  * @param {*} context.fnThis the `this` originally bound to `fn`
  * @param {Number} context.retries # of times to retry the wrapped function
+ * @param {Number} context.initialDelay time to wait before making attempts
  * @param {Number} context.timeout time to wait between retries (in ms)
  * @param {Number} context.factor the exponential scaling factor
  * @param {function} options.shouldRetry - Invoked with the thrown error,
@@ -40,8 +40,15 @@ const execute = async function(context) {
    *
    * In order to achieve this, retries is incremented at the end of each loop
    * iteration as opposed to the beginning of each loop iteration.
+   *
+   * Setting an `initialDelay` pauses execution before the loop
    */
   let retries = 0;
+
+  // Initial Delay
+  if (context.initialDelay !== 0) {
+    await new Promise((resolve) => setTimeout(resolve, context.initialDelay));
+  }
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
@@ -73,6 +80,7 @@ const execute = async function(context) {
        */
       const delay = context.timeout * Math.pow(context.factor, retries);
 
+      /* eslint-disable-next-line max-len*/
       const msg = `retrying function ${context.fnName} in ${delay} ms : attempts: ${attempts}`;
       context.log(msg);
 
@@ -89,7 +97,9 @@ const execute = async function(context) {
  * @type {Object}
  * @property {Number} [options.retries=3] Number of times to retry a wrapped
  *   function
- * @property {Number} [options.timeout=300] Amount of time to wait between
+ * @property {Number} [options.initialDelay=0] Amount of time (ms) to wait before
+ * any function attempts
+ * @property {Number} [options.timeout=300] Amount of time (ms) to wait between
  * retries
  * @property {Number} [options.factor=2] The exponential factor to scale the
  *   timeout by every retry iteration. For example: with a factor of 2 and a
@@ -121,6 +131,7 @@ const retryify = function(options = {}) {
   }
 
   options.retries = getOpt(options.retries, 3);
+  options.initialDelay = getOpt(options.initialDelay, 0);
   options.timeout = getOpt(options.timeout, 300);
   options.factor = getOpt(options.factor, 2);
   options.log = getOpt(options.log, function() {
@@ -146,6 +157,10 @@ const retryify = function(options = {}) {
     }
 
     const retries = getOpt(innerOptions.retries, options.retries);
+    const initialDelay = getOpt(
+      innerOptions.initialDelay,
+      options.initialDelay,
+    );
     const timeout = getOpt(innerOptions.timeout, options.timeout);
     const factor = getOpt(innerOptions.factor, options.factor);
     const log = getOpt(innerOptions.log, options.log);
@@ -160,6 +175,7 @@ const retryify = function(options = {}) {
         fnThis: this,
         args,
         retries,
+        initialDelay,
         timeout,
         factor,
         shouldRetry,
