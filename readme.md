@@ -61,9 +61,9 @@ object and the returned function is what is supposed to take the function
 to retry.
 
 
-| Param | Type | Description |
-| --- | --- | --- |
-| [options] | [<code>Options</code>](#Options) | Optional configuration object |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [options] | [<code>Options</code>](#Options) | <code>{}</code> | Optional configuration object |
 
 <a name="retryify..retryWrapper"></a>
 
@@ -88,9 +88,10 @@ basis.
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | [options.retries] | <code>Number</code> | <code>3</code> | Number of times to retry a wrapped   function |
-| [options.timeout] | <code>Number</code> | <code>300</code> | Amount of time to wait between retries |
+| [options.initialDelay] | <code>Number</code> | <code>0</code> | Amount of time (ms) to wait before any function attempts |
+| [options.timeout] | <code>Number</code> | <code>300</code> | Amount of time (ms) to wait between retries |
 | [options.factor] | <code>Number</code> | <code>2</code> | The exponential factor to scale the   timeout by every retry iteration. For example: with a factor of 2 and a   timeout of 100 ms, the first retry will fire after 100 ms, the second   after 200 ms, the third after 400 ms, etc.... The formula used to   calculate the delay between each retry:   ```timeout * Math.pow(factor, attempts)``` |
-| [options.errors] | <code>Error</code> \| <code>Array.&lt;Error&gt;</code> | <code>Error</code> | A single Error or an   array Errors that trigger a retry when caught |
+| [options.shouldRetry] | <code>function</code> | <code>() &#x3D;&gt; true</code> | Invoked with the thrown error, retryify will retry if this method returns true. |
 | [options.log] | <code>function</code> |  | Logging function that takes a message as |
 
 
