@@ -1,9 +1,11 @@
+dist: focal
+
 language: node_js
 
 node_js:
+  - '18'
+  - '16'
   - '14'
-  - '12'
-  - '10'
 
 cache:
   directories:
@@ -36,5 +38,5 @@ deploy:
   skip_cleanup: true
   script: semantic-release
   on:
-    node_js: '14'
+    node_js: '16'
     all_branches: true
