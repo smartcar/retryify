@@ -21,6 +21,10 @@ install:
   - env -i PATH=$PATH npm rebuild
 
 script:
+  # verify readme has been generated
+  - npm run readme
+  - test -z "$(git diff)"
+
   - npm test
   - npm run cover
 
