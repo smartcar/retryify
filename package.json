@@ -39,13 +39,12 @@
     "cover": "nyc npm test -s",
     "readme": "jsdoc2md --template readme.hbs index.js | sed 's/[\\t ]\\+$//g;s/**\\(Returns\\|Throws\\|Params\\|Properties\\)/<br>**\\1/g' > readme.md"
   },
-  "dependencies": {},
   "devDependencies": {
-    "ava": "^3.0.0",
-    "eslint": "^7.3.1",
+    "ava": "^4.2.0",
+    "eslint": "^8.15.0",
     "eslint-config-smartcar": "^3.0.0",
-    "jsdoc-to-markdown": "^6.0.1",
+    "jsdoc-to-markdown": "^7.1.1",
     "nyc": "^15.0.0",
-    "semantic-release": "^17.0.0"
+    "semantic-release": "^19.0.2"
   }
 }
