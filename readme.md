@@ -14,7 +14,7 @@ const retryify = require('retryify')({
   retries: 5,
   timeout: 1000,
   factor: 2,
-  errors: [RequestError, StatusCodeError],
+  shouldRetry: function(err) { return err instanceof SomeError || err.statusCode === 500 },
   log: function(msg) { console.log(msg); },
 });
 
@@ -50,10 +50,10 @@ get('http://google.com')
 Retry module setup function. Takes an options object that configures the
 default retry options.
 
-**Kind**: global function
-<br>**Returns**: <code>function</code> - [retryWrapper](retryWrapper) A decorator function that wraps a
-  a function to turn it into a retry-enabled function.
-<br>**Throws**:
+**Kind**: global function  
+**Returns**: <code>function</code> - [retryWrapper](retryWrapper) A decorator function that wraps a
+  a function to turn it into a retry-enabled function.  
+**Throws**:
 
 - TypeError when function is passed instead of options object.
 To use retryify it first must be "constructed" by passing in an options
@@ -71,8 +71,8 @@ to retry.
 retryify function decorator. Allows configuration on a function by function
 basis.
 
-**Kind**: inner method of [<code>retryify</code>](#retryify)
-<br>**Returns**: <code>function</code> - The wrapped function.
+**Kind**: inner method of [<code>retryify</code>](#retryify)  
+**Returns**: <code>function</code> - The wrapped function.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -82,8 +82,8 @@ basis.
 <a name="Options"></a>
 
 ## Options : <code>Object</code>
-**Kind**: global typedef
-<br>**Properties**
+**Kind**: global typedef  
+**Properties**
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
