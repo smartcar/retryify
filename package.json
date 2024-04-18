@@ -3,6 +3,7 @@
   "version": "0.0.0-semantic-relase",
   "description": "Wrap a function to retry on specific errors",
   "main": "index.js",
+  "types": "index.d.ts",
   "license": "MIT",
   "author": {
     "name": "Smartcar",
@@ -27,13 +28,14 @@
     "repeat"
   ],
   "files": [
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "engines": {
     "node": ">=10.0.0"
   },
   "scripts": {
-    "test": "ava",
+    "test": "ava && tsd",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
     "cover": "nyc npm test -s",
@@ -46,5 +48,8 @@
     "jsdoc-to-markdown": "^7.1.1",
     "nyc": "^15.0.0",
     "semantic-release": "^19.0.2"
+  },
+  "dependencies": {
+    "tsd": "^0.31.0"
   }
 }

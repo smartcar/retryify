@@ -26,8 +26,9 @@ const getOpt = function(option, _default) {
  * @param {Number} context.initialDelay time to wait before making attempts
  * @param {Number} context.timeout time to wait between retries (in ms)
  * @param {Number} context.factor the exponential scaling factor
- * @param {function} options.shouldRetry - Invoked with the thrown error,
+ * @param {Function} context.shouldRetry - Invoked with the thrown error,
  * retryify will retry if this method returns true.
+ * @param {Function} context.log logging function that takes a message as input
  *
  * @return {Promise} a Promise for whatever the wrapped function eventually
  *   resolves to.
@@ -107,9 +108,9 @@ const execute = async function(context) {
  *   after 200 ms, the third after 400 ms, etc.... The formula used to
  *   calculate the delay between each retry:
  *   ```timeout * Math.pow(factor, attempts)```
- * @property {function} [options.shouldRetry=() => true] - Invoked with the
+ * @property {Function} [options.shouldRetry=() => true] - Invoked with the
  * thrown error, retryify will retry if this method returns true.
- * @property {Function} [options.log] Logging function that takes a message as
+ * @property {Function} [options.log] Logging function that takes a message as input
  */
 
 /**
@@ -190,5 +191,7 @@ const retryify = function(options = {}) {
 
   return retryWrapper;
 };
+
+retryify.retryify = retryify;
 
 module.exports = retryify;
