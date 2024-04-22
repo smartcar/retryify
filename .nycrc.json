@@ -11,7 +11,8 @@
   ],
   "exclude": [
     "test",
-    "node_modules"
+    "node_modules",
+    "patch-md.js"
   ],
   "check-coverage": true,
   "report-dir": ".nyc_output"
