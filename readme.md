@@ -50,7 +50,7 @@ get('http://google.com')
 Retry module setup function. Takes an options object that configures the
 default retry options.
 
-**Kind**: global function  
+**Kind**: global function<br/>
 **Returns**: <code>function</code> - [retryWrapper](retryWrapper) A decorator function that wraps a
   a function to turn it into a retry-enabled function.  
 **Throws**:
@@ -71,8 +71,8 @@ to retry.
 retryify function decorator. Allows configuration on a function by function
 basis.
 
-**Kind**: inner method of [<code>retryify</code>](#retryify)  
-**Returns**: <code>function</code> - The wrapped function.  
+**Kind**: inner method of [<code>retryify</code>](#retryify)<br/>
+**Returns**: <code>function</code> - The wrapped function.<br/>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -82,7 +82,7 @@ basis.
 <a name="Options"></a>
 
 ## Options : <code>Object</code>
-**Kind**: global typedef  
+**Kind**: global typedef<br/>
 **Properties**
 
 | Name | Type | Default | Description |
