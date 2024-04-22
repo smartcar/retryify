@@ -39,7 +39,7 @@
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
     "cover": "nyc npm test -s",
-    "readme": "jsdoc2md --template readme.hbs index.js | sed 's/[\\t ]\\+$//g;s/**\\(Returns\\|Throws\\|Params\\|Properties\\)/<br>**\\1/g' > readme.md"
+    "readme": "jsdoc2md --template readme.hbs index.js | sed  's/[[:space:]]+$//g;s/**\\(Returns\\|Throws\\|Params\\|Properties\\)/<br>**\\1/g' > readme.md"
   },
   "devDependencies": {
     "ava": "^4.2.0",

@@ -25,9 +25,11 @@ install:
 script:
   # verify readme has been generated
   - npm run readme
+  # show diff for debugging
+  - git diff
   - test -z "$(git diff)"
 
-  - npm test
+  # run tests with coverage
   - npm run cover
 
 after_success:

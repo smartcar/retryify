@@ -92,7 +92,7 @@ basis.
 | [options.timeout] | <code>Number</code> | <code>300</code> | Amount of time (ms) to wait between retries |
 | [options.factor] | <code>Number</code> | <code>2</code> | The exponential factor to scale the   timeout by every retry iteration. For example: with a factor of 2 and a   timeout of 100 ms, the first retry will fire after 100 ms, the second   after 200 ms, the third after 400 ms, etc.... The formula used to   calculate the delay between each retry:   ```timeout * Math.pow(factor, attempts)``` |
 | [options.shouldRetry] | <code>function</code> | <code>() &#x3D;&gt; true</code> | Invoked with the thrown error, retryify will retry if this method returns true. |
-| [options.log] | <code>function</code> |  | Logging function that takes a message as |
+| [options.log] | <code>function</code> |  | Logging function that takes a message as input |
 
 
 [npm-url]: https://www.npmjs.com/package/retryify
