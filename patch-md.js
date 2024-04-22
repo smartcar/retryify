@@ -17,8 +17,5 @@ function processLine(line) {
 }
 
 function patchLine(line) {
-  if (line.startsWith('**')) {
-    return line.replace(/\s+$/, '<br/>');
-  }
-  return line;
+  return line.replace(/\s+$/, '<br/>');
 }

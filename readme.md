@@ -52,7 +52,7 @@ default retry options.
 
 **Kind**: global function<br/>
 **Returns**: <code>function</code> - [retryWrapper](retryWrapper) A decorator function that wraps a
-  a function to turn it into a retry-enabled function.  
+  a function to turn it into a retry-enabled function.<br/>
 **Throws**:
 
 - TypeError when function is passed instead of options object.
