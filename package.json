@@ -47,9 +47,7 @@
     "eslint-config-smartcar": "^3.0.0",
     "jsdoc-to-markdown": "^8.0.1",
     "nyc": "^15.1.0",
-    "semantic-release": "^19.0.2"
-  },
-  "dependencies": {
+    "semantic-release": "^19.0.2",
     "tsd": "^0.31.0"
   }
 }
