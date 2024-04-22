@@ -14,7 +14,7 @@ const retryify = require('retryify')({
   retries: 5,
   timeout: 1000,
   factor: 2,
-  errors: [RequestError, StatusCodeError],
+  shouldRetry: function(err) { return err instanceof SomeError || err.statusCode === 500 },
   log: function(msg) { console.log(msg); },
 });
 
@@ -50,10 +50,10 @@ get('http://google.com')
 Retry module setup function. Takes an options object that configures the
 default retry options.
 
-**Kind**: global function
-<br>**Returns**: <code>function</code> - [retryWrapper](retryWrapper) A decorator function that wraps a
-  a function to turn it into a retry-enabled function.
-<br>**Throws**:
+**Kind**: global function<br/>
+**Returns**: <code>function</code> - [retryWrapper](retryWrapper) A decorator function that wraps a
+  a function to turn it into a retry-enabled function.<br/>
+**Throws**:
 
 - TypeError when function is passed instead of options object.
 To use retryify it first must be "constructed" by passing in an options
@@ -71,8 +71,8 @@ to retry.
 retryify function decorator. Allows configuration on a function by function
 basis.
 
-**Kind**: inner method of [<code>retryify</code>](#retryify)
-<br>**Returns**: <code>function</code> - The wrapped function.
+**Kind**: inner method of [<code>retryify</code>](#retryify)<br/>
+**Returns**: <code>function</code> - The wrapped function.<br/>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -82,8 +82,8 @@ basis.
 <a name="Options"></a>
 
 ## Options : <code>Object</code>
-**Kind**: global typedef
-<br>**Properties**
+**Kind**: global typedef<br/>
+**Properties**
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -92,7 +92,7 @@ basis.
 | [options.timeout] | <code>Number</code> | <code>300</code> | Amount of time (ms) to wait between retries |
 | [options.factor] | <code>Number</code> | <code>2</code> | The exponential factor to scale the   timeout by every retry iteration. For example: with a factor of 2 and a   timeout of 100 ms, the first retry will fire after 100 ms, the second   after 200 ms, the third after 400 ms, etc.... The formula used to   calculate the delay between each retry:   ```timeout * Math.pow(factor, attempts)``` |
 | [options.shouldRetry] | <code>function</code> | <code>() &#x3D;&gt; true</code> | Invoked with the thrown error, retryify will retry if this method returns true. |
-| [options.log] | <code>function</code> |  | Logging function that takes a message as |
+| [options.log] | <code>function</code> |  | Logging function that takes a message as input |
 
 
 [npm-url]: https://www.npmjs.com/package/retryify

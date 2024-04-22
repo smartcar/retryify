@@ -3,6 +3,7 @@ dist: focal
 language: node_js
 
 node_js:
+  - '20'
   - '18'
   - '16'
   - '14'
@@ -27,7 +28,7 @@ script:
   - npm run readme
   - test -z "$(git diff)"
 
-  - npm test
+  # run tests with coverage
   - npm run cover
 
 after_success:
@@ -38,5 +39,5 @@ deploy:
   skip_cleanup: true
   script: semantic-release
   on:
-    node_js: '16'
+    node_js: '20'
     all_branches: true

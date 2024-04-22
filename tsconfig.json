@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+    "strict": true,
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}

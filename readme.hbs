@@ -14,7 +14,7 @@ const retryify = require('retryify')({
   retries: 5,
   timeout: 1000,
   factor: 2,
-  errors: [RequestError, StatusCodeError],
+  shouldRetry: function(err) { return err instanceof SomeError || err.statusCode === 500 },
   log: function(msg) { console.log(msg); },
 });
 
