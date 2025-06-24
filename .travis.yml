@@ -32,11 +32,3 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-
-deploy:
-  provider: script
-  skip_cleanup: true
-  script: semantic-release
-  on:
-    node_js: '16'
-    all_branches: true
