@@ -21,6 +21,7 @@
     execute_commands:
     - "npm test"
     - "npm run cover"
+    - "bash <(curl -s https://codecov.io/bash)"
     shell: "BASH"
   - action: "Verify README has been generated"
     type: "BUILD"
